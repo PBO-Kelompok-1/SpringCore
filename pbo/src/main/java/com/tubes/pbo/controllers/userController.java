@@ -1,6 +1,6 @@
 package com.tubes.pbo.controllers;
 
-import com.tubes.pbo.user;
+import com.tubes.pbo.models.user;
 import com.tubes.pbo.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +31,7 @@ public class UserController {
     // Mengambil data user berdasarkan ID (Read)
     @GetMapping("/{id}")
     public Optional<user> getUserById(@PathVariable int id) {
-        return userRepository.findById(id);
+        return Optional.ofNullable(userRepository.findById(id));
     }
 
     // Mengambil data user berdasarkan username (Read)

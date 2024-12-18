@@ -1,6 +1,6 @@
 package com.tubes.pbo.repositories;
 
-import com.tubes.pbo.user;
+import com.tubes.pbo.models.user;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

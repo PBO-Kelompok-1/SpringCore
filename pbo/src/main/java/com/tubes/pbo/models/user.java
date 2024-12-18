@@ -1,4 +1,4 @@
-package com.tubes.pbo;
+package com.tubes.pbo.models;
 import jakarta.persistence.*;
 import lombok.Data;
 
