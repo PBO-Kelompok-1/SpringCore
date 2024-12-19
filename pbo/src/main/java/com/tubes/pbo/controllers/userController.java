@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/users")
-public class UserController {
+public class userController {
 
     @Autowired
     private UserRepository userRepository;
@@ -36,7 +36,7 @@ public class UserController {
 
     // Mengambil data user berdasarkan username (Read)
     @GetMapping("/username/{username}")
-    public List<user> getUserByUsername(@PathVariable String username) {
+    public Optional<user> getUserByUsername(@PathVariable String username) {
         return userRepository.findByUsername(username);
     }
 
