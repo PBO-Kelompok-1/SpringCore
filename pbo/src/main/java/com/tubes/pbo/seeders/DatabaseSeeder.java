@@ -1,6 +1,6 @@
 package com.tubes.pbo.seeders;
 
-import com.tubes.pbo.models.user;
+import com.tubes.pbo.models.User;
 import com.tubes.pbo.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -22,7 +22,7 @@ public class DatabaseSeeder implements CommandLineRunner {
   @Override
   public void run(String... args) throws Exception {
     if (userRepository.findByUsername("admin").isEmpty()) {
-      user admin = new user();
+      User admin = new User();
       admin.setUsername("admin");
       admin.setPassword(passwordEncoder.encode("admin123"));
       admin.setRole("ADMIN");
