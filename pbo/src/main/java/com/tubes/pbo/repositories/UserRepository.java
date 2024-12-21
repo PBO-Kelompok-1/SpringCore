@@ -1,6 +1,6 @@
 package com.tubes.pbo.repositories;
 
-import com.tubes.pbo.models.user;
+import com.tubes.pbo.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -8,11 +8,11 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends JpaRepository<user, Integer> {
+public interface UserRepository extends JpaRepository<User, Integer> {
 
-    Optional<user> findByUsername(String username);
+    Optional<User> findByUsername(String username);
 
-    user findById(int id);
+    User findById(int id);
 }
 
 

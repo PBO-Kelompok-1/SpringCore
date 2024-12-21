@@ -5,7 +5,7 @@ import lombok.Data;
 @Entity
 @Table(name = "user")
 @Data
-public class user {
+public class User {
 
     @Id
     @Column(name = "id")
