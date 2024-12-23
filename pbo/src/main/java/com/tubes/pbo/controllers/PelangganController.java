@@ -5,7 +5,7 @@ import com.tubes.pbo.models.pelanggan;
 import com.tubes.pbo.repositories.PelangganRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-// import org.springframework.security.core.Authentication;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,10 +19,10 @@ public class PelangganController {
     private PelangganRepository pelangganRepository;
 
     @PostMapping
-    public ResponseEntity<String> addPelanggan(@RequestBody pelanggan newPelanggan /* , Authentication authentication */) {
-        // if (!authentication.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals("ROLE_ADMIN"))) {
-        //     return ResponseEntity.status(403).body("Access Denied: Only admin can add data.");
-        // }
+    public ResponseEntity<String> addPelanggan(@RequestBody pelanggan newPelanggan , Authentication authentication ) {
+        if (!authentication.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals("ROLE_ADMIN"))) {
+            return ResponseEntity.status(403).body("Access Denied: Only admin can add data.");
+        }
         pelangganRepository.save(newPelanggan);
         return ResponseEntity.ok("Pelanggan added successfully.");
     }
@@ -42,10 +42,10 @@ public class PelangganController {
 
     // Update pelanggan (only accessible by admin)
     @PutMapping("/{id}")
-    public ResponseEntity<String> updatePelanggan(@PathVariable int id, @RequestBody pelanggan updatedPelanggan /*, Authentication authentication */) {
-        // if (!authentication.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals("ROLE_ADMIN"))) {
-        //     return ResponseEntity.status(403).body("Access Denied: Only admin can edit data.");
-        // }
+    public ResponseEntity<String> updatePelanggan(@PathVariable int id, @RequestBody pelanggan updatedPelanggan , Authentication authentication ) {
+        if (!authentication.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals("ADMIN"))) {
+            return ResponseEntity.status(403).body("Access Denied: Only admin can edit data.");
+        }
 
         Optional<pelanggan> existingPelanggan = pelangganRepository.findById(id);
         if (existingPelanggan.isPresent()) {
@@ -64,11 +64,11 @@ public class PelangganController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deletePelanggan(@PathVariable int id /* , Authentication authentication */) {
+    public ResponseEntity<String> deletePelanggan(@PathVariable int id, Authentication authentication ) {
         // Periksa apakah user memiliki role ADMIN
-        // if (!authentication.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals("ROLE_ADMIN"))) {
-        //     return ResponseEntity.status(403).body("Access Denied: Only admin can delete data.");
-        // }
+        if (!authentication.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals("ADMIN"))) {
+            return ResponseEntity.status(403).body("Access Denied: Only admin can delete data.");
+        }
         
         // Periksa apakah pelanggan dengan ID yang diberikan ada
         if (!pelangganRepository.existsById(id)) {
