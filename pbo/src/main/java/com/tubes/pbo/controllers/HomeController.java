@@ -5,32 +5,48 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.security.Principal;
+import com.tubes.pbo.models.User;
 
 @Controller
 public class HomeController {
 
 
     @GetMapping("/")
-    public String home(Principal principal, Model model) {
+    public String home(Principal principal, Model model,User user) {
         if (principal != null) {
+            
+            //sebenernya ini ga perlu karena udah ada di security config
             // ... (logika untuk user yang sudah login)
             String username = principal.getName();
+            String role = user.getRole();
+           // String role = principal.getAuthorities().iterator().next().getAuthority();
             model.addAttribute("username", username);
 
-            if ("ADMIN".equals(username)) {
-                return "redirect:/admin";
-            } else if ("MEKANIK".equals(username)) {
-                return "redirect:/mekanik";
+            if ("ADMIN".equals(role)) {
+                return "redirect:/dashboard";
+            } else if ("MEKANIK".equals(role)) {
+                return "redirect:/dashboardmekanik";
             }
         } 
         return "index";
     }
 
     @GetMapping("/login")
-    public String login(Model model, String error, String logout) {
-       
-        return "login";
+    public String login(Principal principal,User user) {
+
+        //user getrole gak fungsi
+        String role = user.getRole();
+        if (principal != null) {
+            // Redirect sesuai role jika sudah login
+            if ("ADMIN".equals(role)) {
+                return "redirect:/dashboard";
+            } else if ("MEKANIK".equals(role)) {
+                return "redirect:/dashboardmekanik";
+            }
+        }
+        return "login"; // Jika belum login, tampilkan halaman login
     }
+    
 
     @GetMapping("/index")
     public String index() {
@@ -48,9 +64,9 @@ public class HomeController {
         return "transaksi";
     }
 
-    @GetMapping("/ tesmekanik")
-    public String  tesmekanik() {
-        return " tesmekanik";
+    @GetMapping("/dashboardmekanik")
+    public String  dashboardmekanik() {
+        return "dashboardmekanik";
     }
    
     @Controller
