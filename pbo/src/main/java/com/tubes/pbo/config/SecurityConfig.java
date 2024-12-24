@@ -30,17 +30,19 @@ public class SecurityConfig {
                     .requestMatchers("/admin/**").hasRole("ADMIN")
                     .requestMatchers("/mekanik/**").hasRole("MEKANIK")
                     .requestMatchers("/transaksi/**").hasRole("ADMIN")
-                    .requestMatchers("/tesmekanik/**").hasRole("MEKANIK")
+                    .requestMatchers("/dashboard/**").hasRole("ADMIN")
+                    //.requestMatchers("/", "/login/**").anonymous() // kalo dah login ga bisa ke halaman login lagi tapi gatau kok gamauyak
                     .requestMatchers("/", "/index", "/login").permitAll()
                     .anyRequest().authenticated()
             )
             .formLogin(formLogin -> 
                 formLogin
                     .loginPage("/login")
-                    .defaultSuccessUrl("/dashboard", true)
+                    .successHandler(new CustomAuthenticationHandler()) // Buat misahin handler abis login kemana
                     .failureUrl("/login?error=true")
                     .permitAll()
             )
+
             .logout(logout -> 
                 logout
                     .logoutUrl("/logout")
