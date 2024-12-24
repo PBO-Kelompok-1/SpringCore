@@ -69,6 +69,11 @@ public class HomeController {
         return "dashboardmekanik";
     }
    
+    @GetMapping("/admin/users")
+    public String adminUsersPage() {
+        return "admin/users"; // Path ke templates/admin/users.html
+    }
+
     @Controller
     public class ErrorController {
     
