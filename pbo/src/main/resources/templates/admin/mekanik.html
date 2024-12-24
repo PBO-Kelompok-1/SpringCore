@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Mekanik</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-gray-200">
+
+  <!-- Header -->
+  <div class="p-4 bg-gray-800 shadow-lg">
+    <a href="/dashboard" class="text-2xl font-bold text-white hover:text-gray-400">Manage Mekanik</a>
+  </div>
+
+  <!-- Button Add Mekanik -->
+  <div class="p-4">
+    <button id="open-add-mekanik-form" class="bg-green-500 hover:bg-green-600 px-4 py-2 rounded">Add Mekanik</button>
+  </div>
+
+  <!-- Tabel Mekanik -->
+  <div class="p-4">
+    <table class="w-full text-left bg-gray-800 rounded-lg">
+      <thead>
+        <tr class="bg-gray-700 border-b border-gray-800">
+          <th class="p-2 border-r border-gray-800">ID</th>
+          <th class="p-2 border-r border-gray-800">Username</th>
+          <th class="p-2 border-r border-gray-800">Actions</th>
+        </tr>
+      </thead>
+      <tbody id="mekanik-table-body">
+        <!-- Mekanik data will be populated here -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Form Add/Edit Mekanik -->
+  <div id="add-mekanik-form" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+    <div class="bg-gray-800 p-6 rounded-lg shadow-lg w-1/3">
+      <h3 id="form-title" class="text-xl font-semibold mb-4">Add Mekanik</h3>
+      <form id="mekanik-form">
+        <input type="hidden" id="mekanik-id" name="mekanik-id">
+        <div class="mb-4">
+          <label for="username" class="block text-gray-200">Username</label>
+          <input type="text" id="username" name="username" class="w-full p-2 mt-2 bg-gray-700 text-white rounded" required>
+        </div>
+        <div class="mb-4">
+          <label for="password" class="block text-gray-200">Password</label>
+          <input type="password" id="password" name="password" class="w-full p-2 mt-2 bg-gray-700 text-white rounded" required>
+        </div>
+        <div class="flex justify-between">
+          <button type="submit" id="save-button" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">Save</button>
+          <button type="button" id="close-add-form" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Notification Modal -->
+  <div id="notification-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+    <div class="bg-gray-800 p-4 rounded-lg shadow-lg w-1/3">
+      <p id="notification-message" class="text-center text-lg text-white"></p>
+      <div class="mt-4 flex justify-center">
+        <button id="close-notification" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // API Endpoints
+    const API_ADD_USER = '/users/add';
+    const API_GET_ALL_USERS = '/users/all';
+    const API_DELETE_USER = '/users/delete/';
+    const API_UPDATE_USER = '/users/';
+
+    let isEdit = false;
+
+    // Open and Close Add/Edit Form
+    const addMekanikForm = document.getElementById('add-mekanik-form');
+    const formTitle = document.getElementById('form-title');
+    const mekanikIdField = document.getElementById('mekanik-id');
+
+    document.getElementById('open-add-mekanik-form').addEventListener('click', () => {
+      isEdit = false;
+      formTitle.textContent = 'Add Mekanik';
+      mekanikIdField.value = '';
+      document.getElementById('username').value = '';
+      document.getElementById('password').value = '';
+      addMekanikForm.classList.remove('hidden');
+    });
+
+    document.getElementById('close-add-form').addEventListener('click', () => {
+      addMekanikForm.classList.add('hidden');
+    });
+
+    // Notification Modal
+    const notificationModal = document.getElementById('notification-modal');
+    const notificationMessage = document.getElementById('notification-message');
+    const closeNotification = document.getElementById('close-notification');
+
+    closeNotification.addEventListener('click', () => {
+      notificationModal.classList.add('hidden');
+    });
+
+    function showNotification(message) {
+      notificationMessage.textContent = message;
+      notificationModal.classList.remove('hidden');
+    }
+
+    // Load Mekanik Data
+    async function loadMekanikData() {
+      const response = await fetch(API_GET_ALL_USERS);
+      const users = await response.json();
+      const tableBody = document.getElementById('mekanik-table-body');
+      tableBody.innerHTML = '';
+      users.filter(user => user.role === 'MEKANIK').forEach(user => {
+        const row = document.createElement('tr');
+        row.classList.add('bg-gray-700', 'border-b', 'border-gray-800'); // 'hover:bg-gray-600',
+        row.innerHTML = `
+          <td class="p-2 border-r border-gray-800">${user.id}</td>
+          <td class="p-2 border-r border-gray-800">${user.username}</td>
+          <td class="p-2">
+            <button onclick="editMekanik(${user.id}, '${user.username}')" class="bg-blue-500 hover:bg-blue-600 px-2 py-1 rounded">Edit</button>
+            <button onclick="deleteMekanik(${user.id})" class="bg-red-500 hover:bg-red-600 px-2 py-1 rounded">Delete</button>
+          </td>
+        `;
+        tableBody.appendChild(row);
+      });
+    }
+
+    // Add or Update Mekanik
+    document.getElementById('mekanik-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      const payload = { username, password, role: 'MEKANIK' };
+
+      let response;
+      if (isEdit) {
+        const id = mekanikIdField.value;
+        response = await fetch(API_UPDATE_USER + id, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+      } else {
+        response = await fetch(API_ADD_USER, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+      }
+
+      if (response.ok) {
+        addMekanikForm.classList.add('hidden');
+        showNotification(isEdit ? 'Mekanik berhasil diperbarui.' : 'Mekanik berhasil ditambahkan.');
+        loadMekanikData();
+      } else {
+        showNotification(isEdit ? 'Gagal memperbarui mekanik.' : 'Gagal menambahkan mekanik.');
+      }
+    });
+
+    // Edit Mekanik
+    function editMekanik(id, username) {
+      isEdit = true;
+      formTitle.textContent = 'Edit Mekanik';
+      mekanikIdField.value = id;
+      document.getElementById('username').value = username;
+      document.getElementById('password').value = ''; 
+      addMekanikForm.classList.remove('hidden');
+    }
+
+    // Delete Mekanik
+    async function deleteMekanik(id) {
+      const response = await fetch(API_DELETE_USER + id, { method: 'DELETE' });
+      if (response.ok) {
+        showNotification('Mekanik berhasil dihapus.');
+        loadMekanikData();
+      } else {
+        showNotification('Gagal menghapus mekanik.');
+      }
+    }
+
+    loadMekanikData();
+  </script>
+</body>
+</html>
