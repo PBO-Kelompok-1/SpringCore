@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Dashboard</title>
+  <title>Dashboard</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body class="bg-gray-900 text-white">
@@ -14,7 +14,7 @@
         <li><a href="/admin/mechanics" class="hover:text-gray-400">Mechanics</a></li>
         <li><a href="/admin/users" class="hover:text-gray-400">Users</a></li>
         <li><a href="/admin/settings" class="hover:text-gray-400">Settings</a></li>
-        <li><a href="/logout" class="hover:text-gray-400">Logout</a></li>
+        <li><a href="/logout" class="text-gray-300 hover:text-gray-400">Logout</a></li> 
       </ul>
     </nav>
   </header>
@@ -51,9 +51,37 @@
         </tbody>
       </table>
     </section>
+    
+    <!-- NGETES SESSION INFO -->
+    <section id="session-info" class="mb-8">
+      <h2 class="text-xl font-semibold mb-4">Session Information</h2>
+      <pre class="bg-gray-800 p-4 rounded" id="session-data">
+        <!-- Session data will be displayed here -->
+      </pre>
+    </section>
   </main>
-  <footer class="bg-gray-800 p-4 text-center"></footer>
+  <footer class="bg-gray-800 p-4 text-center">
     <p>&copy; 2023 Your Company. All rights reserved.</p>
   </footer>
+
+  
+  <script>
+    //Buat ngecek session 
+    async function fetchSessionInfo() {
+      try {
+        const response = await fetch('/session-info'); // Fetch data from backend
+        const sessionInfo = await response.json();
+
+        // Update the session info section
+        const sessionDataElement = document.getElementById('session-data');
+        sessionDataElement.textContent = JSON.stringify(sessionInfo, null, 2);
+      } catch (error) {
+        console.error('Error fetching session info:', error);
+      }
+    }
+
+    // Call the function when the page loads
+    document.addEventListener('DOMContentLoaded', fetchSessionInfo);
+  </script>
 </body>
 </html>

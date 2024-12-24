@@ -28,15 +28,10 @@ public class HomeController {
 
     @GetMapping("/login")
     public String login(Model model, String error, String logout) {
-        if (error != null) {
-            model.addAttribute("errorMessage", "Login Gagal. Periksa kembali username dan password Anda.");
-        }
-        if (logout != null) {
-            model.addAttribute("logoutMessage", "Anda telah berhasil logout.");
-        }
+       
         return "login";
     }
-    
+
     @GetMapping("/index")
     public String index() {
         return "index";
@@ -45,6 +40,28 @@ public class HomeController {
 
     @GetMapping("/dashboard")
     public String dashboard() {
-        return "admin/dashboard";
+        return "admin/dashboard"; //ke lokasi /admin/dashboard
     }
+
+    @GetMapping("/transaksi")
+    public String transaksi() {
+        return "transaksi";
+    }
+
+    @GetMapping("/ tesmekanik")
+    public String  tesmekanik() {
+        return " tesmekanik";
+    }
+   
+    @Controller
+    public class ErrorController {
+    
+        @GetMapping("/access-denied")
+        public String accessDenied() {
+            return "error/access-denied"; // Path sesuai dengan lokasi file HTML
+        }
+    }
+
+
+
 }

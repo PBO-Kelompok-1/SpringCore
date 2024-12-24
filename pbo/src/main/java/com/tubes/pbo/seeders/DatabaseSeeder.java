@@ -31,5 +31,17 @@ public class DatabaseSeeder implements CommandLineRunner {
     } else {
       System.out.println("Admin user already exists");
     }
+
+    //tes bikin mekanik
+    if (userRepository.findByUsername("mekanik1").isEmpty()) {
+      User mekanik1 = new User();
+      mekanik1.setUsername("mekanik1");
+      mekanik1.setPassword(passwordEncoder.encode("mekanik123"));
+      mekanik1.setRole("MEKANIK");
+      userRepository.save(mekanik1);
+      System.out.println("mekanik1 user created");
+    } else {
+      System.out.println("mekanik1 user already exists");
+    }
   }
 }
