@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spareparts</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-900 text-white">
+  <header class="bg-gray-800 p-4">
+    <h1 class="text-2xl font-bold">Admin Dashboard</h1>
+    <nav>
+      <ul class="flex space-x-4">
+        <li><a href="/admin/mechanics" class="hover:text-gray-400">Mechanics</a></li>
+        <li><a href="/sparepart" class="hover:text-gray-400">Spareparts</a></li>
+        <li><a href="/admin/users" class="hover:text-gray-400">Users</a></li>
+        <li><a href="/admin/settings" class="hover:text-gray-400">Settings</a></li>
+        <li><a href="/logout" class="text-gray-300 hover:text-gray-400">Logout</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main class="p-4">
+
+    <!-- Spareparts Section -->
+    <section id="spareparts" class="mb-8">
+      <h2 class="text-xl font-semibold mb-4">Spareparts</h2>
+      <button id="add-sparepart" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 mb-4 rounded">Add Sparepart</button>
+      <table class="min-w-full bg-gray-800 border border-gray-700">
+        <thead>
+          <tr>
+            <th class="py-2 px-4 border-b border-gray-700">ID</th>
+            <th class="py-2 px-4 border-b border-gray-700">Name</th>
+            <th class="py-2 px-4 border-b border-gray-700">Description</th>
+            <th class="py-2 px-4 border-b border-gray-700">Price</th>
+            <th class="py-2 px-4 border-b border-gray-700">Stock</th>
+            <th class="py-2 px-4 border-b border-gray-700 text-center">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="sparepart : ${spareparts}">
+            <td th:text="${sparepart.id}" class="py-2 px-4 border-b border-gray-700"></td>
+            <td th:text="${sparepart.nama}" class="py-2 px-4 border-b border-gray-700"></td>
+            <td th:text="${sparepart.deskripsi}" class="py-2 px-4 border-b border-gray-700"></td>
+            <td th:text="${sparepart.harga}" class="py-2 px-4 border-b border-gray-700"></td>
+            <td th:text="${sparepart.stok}" class="py-2 px-4 border-b border-gray-700"></td>
+            <td class="py-2 px-4 border-b border-gray-700 text-center">
+              <button class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded mr-2 edit-sparepart"
+                      th:attr="data-id=${sparepart.id}"
+                      th:data-nama="${sparepart.nama}"
+                      th:data-deskripsi="${sparepart.deskripsi}"
+                      th:data-harga="${sparepart.harga}"
+                      th:data-stok="${sparepart.stok}"
+                      >Edit</button>
+                <form th:action="@{/sparepart/{id}(id=${sparepart.id})}" method="post" class="inline-block">
+                <input type="hidden" name="_method" value="delete"/>
+                <button type="button" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded delete-button">
+                    Delete
+                </button>
+                </form>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Add Sparepart Form -->
+    <div id="add-sparepart-form" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+      <div class="bg-gray-800 p-6 rounded-lg shadow-lg w-1/3">
+        <h3 class="text-xl font-semibold mb-4">Add Sparepart</h3>
+        <form th:action="@{/sparepart}" method="post">
+          <div class="mb-4">
+            <label for="nama" class="block text-gray-200">Nama</label>
+            <input type="text" id="nama" name="nama" class="w-full p-2 mt-2 bg-gray-700 text-white rounded" required>
+          </div>
+          <div class="mb-4">
+            <label for="deskripsi" class="block text-gray-200">Deskripsi</label>
+            <input type="text" id="deskripsi" name="deskripsi" class="w-full p-2 mt-2 bg-gray-700 text-white rounded" required>
+          </div>
+          <div class="mb-4">
+            <label for="harga" class="block text-gray-200">Harga</label>
+            <input type="number" id="harga" name="harga" class="w-full p-2 mt-2 bg-gray-700 text-white rounded" required>
+          </div>
+          <div class="mb-4">
+            <label for="stok" class="block text-gray-200">Stok</label>
+            <input type="number" id="stok" name="stok" class="w-full p-2 mt-2 bg-gray-700 text-white rounded" required>
+          </div>
+          <div class="flex justify-between">
+            <button type="submit" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">Save</button>
+            <button type="button" id="close-add-form" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Edit Sparepart Form -->
+    <div id="edit-sparepart-form" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+      <div class="bg-gray-800 p-6 rounded-lg shadow-lg w-1/3">
+        <h3 class="text-xl font-semibold mb-4">Edit Sparepart</h3>
+        <form th:action="@{/sparepart/{id}}" method="post">
+            <input type="hidden" name="_method" value="put" />
+          <div class="mb-4">
+            <label for="edit-nama" class="block text-gray-200">Nama</label>
+            <input type="text" id="edit-nama" name="nama" class="w-full p-2 mt-2 bg-gray-700 text-white rounded" required>
+          </div>
+          <div class="mb-4">
+            <label for="edit-deskripsi" class="block text-gray-200">Deskripsi</label>
+            <input type="text" id="edit-deskripsi" name="deskripsi" class="w-full p-2 mt-2 bg-gray-700 text-white rounded" required>
+          </div>
+          <div class="mb-4">
+            <label for="edit-harga" class="block text-gray-200">Harga</label>
+            <input type="number" id="edit-harga" name="harga" class="w-full p-2 mt-2 bg-gray-700 text-white rounded" required>
+          </div>
+          <div class="mb-4">
+            <label for="edit-stok" class="block text-gray-200">Stok</label>
+            <input type="number" id="edit-stok" name="stok" class="w-full p-2 mt-2 bg-gray-700 text-white rounded" required>
+          </div>
+          <div class="flex justify-between">
+            <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">Update</button>
+            <button type="button" id="close-edit-form" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="delete-confirmation-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-gray-800 p-6 rounded-lg shadow-lg w-1/3">
+          <h3 class="text-xl font-semibold mb-4 text-white">Confirm Delete</h3>
+          <p class="mb-4 text-gray-300">Are you sure you want to delete this sparepart?</p>
+          <div class="flex justify-between">
+            <button id="confirm-delete" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded">Delete</button>
+            <button id="cancel-delete" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded">Cancel</button>
+          </div>
+        </div>
+        <div th:if="${successMessage}" class="bg-green-500 text-white p-4 rounded mb-4">
+          <p th:text="${successMessage}"></p>
+        </div>
+        <div th:if="${errorMessage}" class="bg-red-500 text-white p-4 rounded mb-4">
+          <p th:text="${errorMessage}"></p>
+        </div>
+      </div>
+      
+      
+
+  </main>
+  <footer class="bg-gray-800 p-4 text-center">
+    <p>&copy; 2023 Your Company. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // Show Add Sparepart Form
+    document.getElementById("add-sparepart").addEventListener("click", function() {
+      document.getElementById("add-sparepart-form").classList.remove("hidden");
+    });
+
+    // Close Add Sparepart Form
+    document.getElementById("close-add-form").addEventListener("click", function() {
+      document.getElementById("add-sparepart-form").classList.add("hidden");
+    });
+
+    // Show Edit Sparepart Form and Populate Data
+    document.querySelectorAll(".edit-sparepart").forEach(button => {
+      button.addEventListener("click", function() {
+        const id = this.getAttribute("data-id");
+        const nama = this.getAttribute("data-nama");
+        const deskripsi = this.getAttribute("data-deskripsi");
+        const harga = this.getAttribute("data-harga");
+        const stok = this.getAttribute("data-stok");
+
+        document.getElementById("edit-nama").value = nama;
+        document.getElementById("edit-deskripsi").value = deskripsi;
+        document.getElementById("edit-harga").value = harga;
+        document.getElementById("edit-stok").value = stok;
+
+        const form = document.querySelector("#edit-sparepart-form form");
+        form.setAttribute("action", `/sparepart/${id}`);
+
+        document.getElementById("edit-sparepart-form").classList.remove("hidden");
+      });
+    });
+
+    // Close Edit Sparepart Form
+    document.getElementById("close-edit-form").addEventListener("click", function() {
+      document.getElementById("edit-sparepart-form").classList.add("hidden");
+    });
+
+    document.querySelectorAll(".delete-button").forEach(button => {
+  button.addEventListener("click", function(event) {
+    event.preventDefault(); // Prevent immediate form submission
+    const form = this.closest("form"); // Get the form element
+    document.getElementById("delete-confirmation-modal").classList.remove("hidden");
+
+    // Confirm delete
+    document.getElementById("confirm-delete").onclick = function() {
+      form.submit(); // Submit the form if confirmed
+      document.getElementById("delete-confirmation-modal").classList.add("hidden");
+    };
+
+    // Cancel delete
+    document.getElementById("cancel-delete").onclick = function() {
+      document.getElementById("delete-confirmation-modal").classList.add("hidden");
+    };
+  });
+});
+
+  </script>
+
+</body>
+</html>
