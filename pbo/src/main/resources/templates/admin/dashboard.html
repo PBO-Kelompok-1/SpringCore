@@ -7,177 +7,50 @@
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body class="bg-gray-900 text-white">
-  <header class="bg-gray-800 p-4">
-    <h1 class="text-2xl font-bold">Admin Dashboard</h1>
-    <nav>
-      <ul class="flex space-x-4">
-        <li><a href="/admin/mechanics" class="hover:text-gray-400">Mechanics</a></li>
-        <li><a href="/admin/users" class="hover:text-gray-400">Users</a></li>
-        <li><a href="/admin/settings" class="hover:text-gray-400">Settings</a></li>
-        <li><a href="/logout" class="text-gray-300 hover:text-gray-400">Logout</a></li>
-      </ul>
-    </nav>
-  </header>
-  <main class="p-4">
-    <!-- Mechanics Section -->
-    <section id="mechanics" class="mb-8">
-      <h2 class="text-xl font-semibold mb-4">Mechanics</h2>
-      <table class="min-w-full bg-gray-800">
-        <thead>
-          <tr>
-            <th class="py-2 px-4 border-b border-gray-700">ID</th>
-            <th class="py-2 px-4 border-b border-gray-700">Name</th>
-            <th class="py-2 px-4 border-b border-gray-700">Specialization</th>
-            <th class="py-2 px-4 border-b border-gray-700">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- Mechanics data will be populated here -->
-        </tbody>
-      </table>
-    </section>
+  <div class="min-h-screen flex flex-col">
+    <header class="bg-gray-800 p-4">
+      <h1 class="text-2xl font-bold">Admin Dashboard</h1>
+      <nav>
+        <ul class="flex space-x-4">
+          <li><a href="/dashboard" class="hover:text-gray-400">Dashboard</a></li>
+          <li><a href="/admin/mechanics" class="hover:text-gray-400">Mechanics</a></li>
+          <li><a href="/sparepart" class="hover:text-gray-400">Spareparts</a></li>
+          <li><a href="/admin/users" class="hover:text-gray-400">Users</a></li>
+          <li><a href="/admin/settings" class="hover:text-gray-400">Settings</a></li>
+          <li><a href="/logout" class="text-gray-300 hover:text-gray-400">Logout</a></li>
+        </ul>
+      </nav>
+    </header>
+    <main class="p-4 flex-grow">
+      <!-- Mechanics Section -->
+      <section id="mechanics" class="mb-8">
+        <h2 class="text-xl font-semibold mb-4">Mechanics</h2>
+        <table class="min-w-full bg-gray-800">
+          <thead>
+            <tr>
+              <th class="py-2 px-4 border-b border-gray-700">ID</th>
+              <th class="py-2 px-4 border-b border-gray-700">Name</th>
+              <th class="py-2 px-4 border-b border-gray-700">Specialization</th>
+              <th class="py-2 px-4 border-b border-gray-700">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Mechanics data will be populated here -->
+          </tbody>
+        </table>
+      </section>
 
-    <!-- Spareparts Section -->
-    <section id="spareparts" class="mb-8">
-      <h2 class="text-xl font-semibold mb-4">Spareparts</h2>
-      <button id="add-sparepart" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 mb-4 rounded">Add Sparepart</button>
-      <table class="min-w-full bg-gray-800">
-        <thead>
-          <tr>
-            <th class="py-2 px-4 border-b border-gray-700">ID</th>
-            <th class="py-2 px-4 border-b border-gray-700">Name</th>
-            <th class="py-2 px-4 border-b border-gray-700">Description</th>
-            <th class="py-2 px-4 border-b border-gray-700">Price</th>
-            <th class="py-2 px-4 border-b border-gray-700">Stock</th>
-            <th class="py-2 px-4 border-b border-gray-700">Actions</th>
-          </tr>
-        </thead>
-        <tbody id="spareparts-body">
-          <!-- Spareparts data will be populated here -->
-        </tbody>
-      </table>
-    </section>
-
-    <!-- Add Sparepart Form (Initially Hidden) -->
-    <div id="add-sparepart-form" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
-      <div class="bg-gray-800 p-6 rounded-lg shadow-lg w-1/3">
-        <h3 class="text-xl font-semibold mb-4">Add Sparepart</h3>
-        <form id="sparepart-form">
-          <div class="mb-4">
-            <label for="name" class="block text-gray-200">Name</label>
-            <input type="text" id="name" name="name" class="w-full p-2 mt-2 bg-gray-700 text-white rounded" required>
-          </div>
-          <div class="mb-4">
-            <label for="description" class="block text-gray-200">Description</label>
-            <input type="text" id="description" name="description" class="w-full p-2 mt-2 bg-gray-700 text-white rounded" required>
-          </div>
-          <div class="mb-4">
-            <label for="price" class="block text-gray-200">Price</label>
-            <input type="number" id="price" name="price" class="w-full p-2 mt-2 bg-gray-700 text-white rounded" required>
-          </div>
-          <div class="mb-4">
-            <label for="stock" class="block text-gray-200">Stock</label>
-            <input type="number" id="stock" name="stock" class="w-full p-2 mt-2 bg-gray-700 text-white rounded" required>
-          </div>
-          <div class="flex justify-between">
-            <button type="submit" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">Save</button>
-            <button type="button" id="close-form" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded">Cancel</button>
-          </div>
-        </form>
-      </div>
-    </div>
-
-    <!-- Session Info -->
-    <section id="session-info" class="mb-8">
-      <h2 class="text-xl font-semibold mb-4">Session Information</h2>
-      <pre class="bg-gray-800 p-4 rounded" id="session-data">
-        <!-- Session data will be displayed here -->
-      </pre>
-    </section>
-  </main>
-  <footer class="bg-gray-800 p-4 text-center">
-    <p>&copy; 2023 Your Company. All rights reserved.</p>
-  </footer>
-
-  <script>
-    // Fetch spareparts data from the backend
-    async function fetchSpareparts() {
-      try {
-        const response = await fetch('/sparepart');
-        const spareparts = await response.json();
-        const sparepartsBody = document.getElementById('spareparts-body');
-        sparepartsBody.innerHTML = '';
-
-        spareparts.forEach(sparepart => {
-          const row = document.createElement('tr');
-          row.innerHTML = `
-            <td class="py-2 px-4 border-b border-gray-700">${sparepart.id}</td>
-            <td class="py-2 px-4 border-b border-gray-700">${sparepart.nama}</td>
-            <td class="py-2 px-4 border-b border-gray-700">${sparepart.deskripsi || '-'}</td>
-            <td class="py-2 px-4 border-b border-gray-700">${sparepart.harga}</td>
-            <td class="py-2 px-4 border-b border-gray-700">${sparepart.stok}</td>
-            <td class="py-2 px-4 border-b border-gray-700">
-              <button class="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded">Edit</button>
-              <button class="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded">Delete</button>
-            </td>
-          `;
-          sparepartsBody.appendChild(row);
-        });
-      } catch (error) {
-        console.error('Error fetching spareparts:', error);
-      }
-    }
-
-    // Show the Add Sparepart form
-    document.getElementById('add-sparepart').addEventListener('click', () => {
-      // Clear all form fields
-      const form = document.getElementById('sparepart-form');
-      form.reset();
-
-      // Show the form
-      document.getElementById('add-sparepart-form').classList.remove('hidden');
-    });
-    // Close the Add Sparepart form
-    document.getElementById('close-form').addEventListener('click', () => {
-      document.getElementById('add-sparepart-form').classList.add('hidden');
-    });
-
-    // Handle form submission
-    document.getElementById('sparepart-form').addEventListener('submit', async (event) => {
-      event.preventDefault();
-      const name = document.getElementById('name').value;
-      const description = document.getElementById('description').value;
-      const price = document.getElementById('price').value;
-      const stock = document.getElementById('stock').value;
-
-      if (name && description && price && stock) {
-        try {
-          // Make a POST request to add the new sparepart
-          await fetch('/sparepart', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              nama: name,
-              deskripsi: description,
-              harga: price,
-              stok: stock,
-            }),
-          });
-
-          fetchSpareparts();  // Reload spareparts data
-          document.getElementById('add-sparepart-form').classList.add('hidden');  // Close form
-        } catch (error) {
-          console.error('Error adding sparepart:', error);
-        }
-      }
-    });
-
-    // Call functions on page load
-    document.addEventListener('DOMContentLoaded', () => {
-      fetchSpareparts();
-    });
-  </script>
+      <!-- Session Info -->
+      <section id="session-info" class="mb-8">
+        <h2 class="text-xl font-semibold mb-4">Session Information</h2>
+        <pre class="bg-gray-800 p-4 rounded" id="session-data">
+          <!-- Session data will be displayed here -->
+        </pre>
+      </section>
+    </main>
+    <footer class="bg-gray-800 p-4 text-center">
+      <p>&copy; 2024 Bengkel Jawa. All rights reserved.</p>
+    </footer>
+  </div>
 </body>
 </html>
