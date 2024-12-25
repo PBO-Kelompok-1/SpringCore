@@ -54,11 +54,8 @@ public class DatabaseSeeder implements CommandLineRunner {
     if (pelangganRepository.findByNama("John Doe").isEmpty()) {
       Pelanggan pelanggan1 = new Pelanggan();
       pelanggan1.setNama("John Doe");
-      pelanggan1.setKendaraan("Toyota");
-      pelanggan1.setNo_polisi("B1234XYZ");
       pelanggan1.setAlamat("Jl. Merdeka No. 1");
       pelanggan1.setNo_hp("08123456789");
-      pelanggan1.setCatatan("Pelanggan tetap");
       pelangganRepository.save(pelanggan1);
       System.out.println("Pelanggan John Doe created");
     } else {
@@ -68,11 +65,8 @@ public class DatabaseSeeder implements CommandLineRunner {
     if (pelangganRepository.findByNama("Jane Smith").isEmpty()) {
       Pelanggan pelanggan2 = new Pelanggan();
       pelanggan2.setNama("Jane Smith");
-      pelanggan2.setKendaraan("Honda");
-      pelanggan2.setNo_polisi("B5678XYZ");
       pelanggan2.setAlamat("Jl. Sudirman No. 2");
       pelanggan2.setNo_hp("08987654321");
-      pelanggan2.setCatatan("Pelanggan baru");
       pelangganRepository.save(pelanggan2);
       System.out.println("Pelanggan Jane Smith created");
     } else {

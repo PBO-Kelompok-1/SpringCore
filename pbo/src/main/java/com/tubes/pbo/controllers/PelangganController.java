@@ -51,11 +51,8 @@ public class PelangganController {
         if (existingPelanggan.isPresent()) {
             Pelanggan pelanggan = existingPelanggan.get();
             pelanggan.setNama(updatedPelanggan.getNama());
-            pelanggan.setKendaraan(updatedPelanggan.getKendaraan());
-            pelanggan.setNo_polisi(updatedPelanggan.getNo_polisi());
             pelanggan.setAlamat(updatedPelanggan.getAlamat());
             pelanggan.setNo_hp(updatedPelanggan.getNo_hp());
-            pelanggan.setCatatan(updatedPelanggan.getCatatan());
             pelangganRepository.save(pelanggan);
             return ResponseEntity.ok("Pelanggan updated successfully.");
         } else {

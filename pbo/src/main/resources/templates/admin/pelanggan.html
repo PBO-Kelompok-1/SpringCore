@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Pelanggan</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-gray-200">
+
+  <!-- Header -->
+  <div class="p-4 bg-gray-800 shadow-lg">
+    <a href="/dashboard" class="text-2xl font-bold text-white hover:text-gray-400">Manage Pelanggan</a>
+  </div>
+
+  <!-- Tabel Pelanggan -->
+  <div class="p-4">
+    <table class="w-full text-left bg-gray-800 rounded-lg">
+      <thead>
+        <tr class="bg-gray-700 border-b border-gray-800">
+          <th class="p-2 border-r border-gray-800">ID</th>
+          <th class="p-2 border-r border-gray-800">Nama</th>
+          <th class="p-2 border-r border-gray-800">No HP</th>
+          <th class="p-2 border-r border-gray-800">Alamat</th>
+          <th class="p-2 border-r border-gray-800">Aksi</th>
+        </tr>
+      </thead>
+      <tbody id="pelanggan-table-body">
+        <!-- pelanggan data will be populated here -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Form Edit Pelanggan -->
+  <div id="edit-pelanggan-form" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+    <div class="bg-gray-800 p-6 rounded-lg shadow-lg w-1/3">
+      <h3 id="form-title" class="text-xl font-semibold mb-4">Edit Pelanggan</h3>
+      <form id="pelanggan-form">
+        <input type="hidden" id="pelanggan-id" name="pelanggan-id">
+        <div class="mb-4">
+          <label for="nama" class="block text-gray-200">Nama</label>
+          <input type="text" id="nama" name="nama" class="w-full p-2 mt-2 bg-gray-700 text-white rounded" required>
+        </div>
+        <div class="mb-4">
+          <label for="no_hp" class="block text-gray-200">No HP</label>
+          <input type="text" id="no_hp" name="no_hp" class="w-full p-2 mt-2 bg-gray-700 text-white rounded" required>
+        </div>
+        <div class="mb-4">
+          <label for="alamat" class="block text-gray-200">Alamat</label>
+          <input type="text" id="alamat" name="alamat" class="w-full p-2 mt-2 bg-gray-700 text-white rounded" required>
+        </div>
+        <div class="flex justify-between">
+          <button type="button" id="close-edit-form" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded">Cancel</button>
+          <button type="submit" id="save-button" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const API_GET_ALL_USERS = '/pelanggan';
+    const API_UPDATE_USER = '/pelanggan/';
+
+    const editPelangganForm = document.getElementById('edit-pelanggan-form');
+    const pelangganIdField = document.getElementById('pelanggan-id');
+
+    // Load Pelanggan Data
+    async function loadPelangganData() {
+      try {
+        const response = await fetch(API_GET_ALL_USERS);
+        if (!response.ok) throw new Error('Failed to fetch data');
+
+        const pelanggans = await response.json();
+        const tableBody = document.getElementById('pelanggan-table-body');
+        tableBody.innerHTML = '';
+
+        pelanggans.forEach(pelanggan => {
+          const row = document.createElement('tr');
+          row.classList.add('bg-gray-700', 'border-b', 'border-gray-800');
+          row.innerHTML = `
+            <td class="p-2 border-r border-gray-800">${pelanggan.id}</td>
+            <td class="p-2 border-r border-gray-800">${pelanggan.nama}</td>
+            <td class="p-2 border-r border-gray-800">${pelanggan.no_hp}</td>
+            <td class="p-2 border-r border-gray-800">${pelanggan.alamat}</td>
+            <td class="p-2">
+              <button onclick="editPelanggan(${pelanggan.id}, '${pelanggan.nama}', '${pelanggan.no_hp}', '${pelanggan.alamat}')" class="bg-blue-500 hover:bg-blue-600 px-2 py-1 rounded">Edit</button>
+            </td>
+          `;
+          tableBody.appendChild(row);
+        });
+      } catch (error) {
+        console.error('Error loading pelanggan data:', error);
+      }
+    }
+
+    // Edit Pelanggan
+    function editPelanggan(id, nama, no_hp, alamat) {
+      pelangganIdField.value = id;
+      document.getElementById('nama').value = nama;
+      document.getElementById('no_hp').value = no_hp;
+      document.getElementById('alamat').value = alamat;
+      editPelangganForm.classList.remove('hidden');
+    }
+
+    // Save Edited Pelanggan
+    document.getElementById('pelanggan-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const id = pelangganIdField.value;
+      const payload = {
+        nama: document.getElementById('nama').value,
+        no_hp: document.getElementById('no_hp').value,
+        alamat: document.getElementById('alamat').value,
+      };
+
+      try {
+        const response = await fetch(API_UPDATE_USER + id, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+
+        if (response.ok) {
+          editPelangganForm.classList.add('hidden');
+          loadPelangganData();
+        } else {
+          alert('Gagal memperbarui pelanggan.');
+        }
+      } catch (error) {
+        console.error('Error updating pelanggan:', error);
+      }
+    });
+
+    // Close Edit Form
+    document.getElementById('close-edit-form').addEventListener('click', () => {
+      editPelangganForm.classList.add('hidden');
+    });
+
+    // Initial Load
+    loadPelangganData();
+  </script>
+</body>
+</html>
