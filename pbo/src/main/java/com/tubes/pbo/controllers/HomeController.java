@@ -64,6 +64,12 @@ public class HomeController {
         return "transaksi";
     }
 
+    @GetMapping("/transaksi/form")
+    public String transaksiForm() {
+        return "transaksiForm";
+    }
+
+
     @GetMapping("/dashboardmekanik")
     public String  dashboardmekanik() {
         return "dashboardmekanik";
