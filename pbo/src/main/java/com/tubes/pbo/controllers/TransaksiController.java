@@ -31,7 +31,7 @@ public class TransaksiController {
   public ResponseEntity<String> addTransaksi(@RequestBody Transaksi newTransaksi) {
     transaksiRepository.save(newTransaksi);
     return ResponseEntity.ok("Transaksi berhasil ditambahkan.");
-  }  
+  } 
 
   @GetMapping("/all")
   public List<Transaksi> getAllTransaksi() {

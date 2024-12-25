@@ -120,7 +120,7 @@
           <td>${transaksi.sparepart}</td>
           <td>${transaksi.biayaJasa}</td>
           <td>${transaksi.pelanggan ? transaksi.pelanggan.nama : '-'}</td>
-          <td>${transaksi.mekanik ? transaksi.mekanik.nama : '-'}</td>
+          <td>${transaksi.mekanik ? transaksi.mekanik.username : '-'}</td>
         `;
         transaksiBody.appendChild(row);
       });

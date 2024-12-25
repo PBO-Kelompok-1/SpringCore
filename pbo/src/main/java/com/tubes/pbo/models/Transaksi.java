@@ -1,3 +1,4 @@
+// filepath: /d:/KULIAH/Semester 5/TubesPBO/SpringCore/pbo/src/main/java/com/tubes/pbo/models/Transaksi.java
 package com.tubes.pbo.models;
 
 import jakarta.persistence.*;
@@ -39,4 +40,14 @@ public class Transaksi {
   @ManyToOne
   @JoinColumn(name = "id_mekanik", referencedColumnName = "id")
   private User mekanik;
+
+  public void setPelangganId(int pelangganId) {
+    this.pelanggan = new Pelanggan();
+    this.pelanggan.setId(pelangganId);
+  }
+
+  public void setMekanikId(int mekanikId) {
+    this.mekanik = new User();
+    this.mekanik.setId((long) mekanikId);
+  }
 }
