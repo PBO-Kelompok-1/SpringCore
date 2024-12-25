@@ -4,13 +4,14 @@ import com.tubes.pbo.models.Sparepart;
 import com.tubes.pbo.repositories.SparepartRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-// import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.ui.Model;
 
 import java.util.List;
 import java.util.Optional;
 
-@RestController
+@Controller
 @RequestMapping("/sparepart")
 public class SparepartController {
 
@@ -18,18 +19,20 @@ public class SparepartController {
     private SparepartRepository sparepartRepository;
 
     @PostMapping
-    public ResponseEntity<String> addSparepart(@RequestBody Sparepart newSparepart /* , Authentication authentication */) {
-        // if (!authentication.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals("ROLE_ADMIN"))) {
-        //     return ResponseEntity.status(403).body("Access Denied: Only admin can add data.");
-        // }
-        sparepartRepository.save(newSparepart);
-        return ResponseEntity.ok("Sparepart added successfully.");
+    public String addSparepart(@ModelAttribute Sparepart sparepart) {
+        sparepartRepository.save(sparepart);
+
+        return "redirect:/sparepart";
     }
 
     // Get all sparepart
     @GetMapping
-    public List<Sparepart> getAllSpareparts() {
-        return sparepartRepository.findAll();
+    public String getAllSpareparts(Model model) {
+        List<Sparepart> spareparts = sparepartRepository.findAll();
+
+        model.addAttribute("spareparts", spareparts);
+
+        return "sparepart";
     }
 
     // Get sparepart by ID
@@ -39,9 +42,9 @@ public class SparepartController {
         return sparepart.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // Update sparepart
+    // Update sparepart (using form data)
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateSparepart(@PathVariable int id, @RequestBody Sparepart updatedSparepart) {
+    public String updateSparepart(@PathVariable int id, @ModelAttribute Sparepart updatedSparepart) {
         Optional<Sparepart> existingSparepart = sparepartRepository.findById(id);
         if (existingSparepart.isPresent()) {
             Sparepart sparepart = existingSparepart.get();
@@ -50,26 +53,15 @@ public class SparepartController {
             sparepart.setHarga(updatedSparepart.getHarga());
             sparepart.setStok(updatedSparepart.getStok());
             sparepartRepository.save(sparepart);
-            return ResponseEntity.ok("Sparepart updated successfully.");
-        } else {
-            return ResponseEntity.notFound().build();
         }
+        return "redirect:/sparepart";
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteSparepart(@PathVariable int id /* , Authentication authentication */) {
-        // Periksa apakah user memiliki role ADMIN
-        // if (!authentication.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals("ROLE_ADMIN"))) {
-        //     return ResponseEntity.status(403).body("Access Denied: Only admin can delete data.");
-        // }
-        
-        // Periksa apakah sparepart dengan ID yang diberikan ada
-        if (!sparepartRepository.existsById(id)) {
-            return ResponseEntity.status(404).body("Sparepart with ID " + id + " not found.");
+    public String deleteSparepart(@PathVariable int id) {
+        if (sparepartRepository.existsById(id)) {
+            sparepartRepository.deleteById(id);
         }
-        
-        // Hapus sparepart
-        sparepartRepository.deleteById(id);
-        return ResponseEntity.ok("Sparepart with ID " + id + " deleted successfully.");
+        return "redirect:/sparepart";
     }
 }
