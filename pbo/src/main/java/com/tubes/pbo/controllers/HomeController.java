@@ -76,7 +76,12 @@ public class HomeController {
 
     @GetMapping("/admin/mechanics")
     public String adminMechanicsPage() {
-        return "admin/mekanik"; // Path ke templates/admin/users.html
+        return "admin/mekanik"; 
+    }
+
+    @GetMapping("/admin/pelanggan")
+    public String adminPelangganPage() {
+        return "admin/pelanggan"; 
     }
 
     @Controller
