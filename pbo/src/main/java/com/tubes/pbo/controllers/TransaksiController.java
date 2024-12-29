@@ -5,6 +5,8 @@ import com.tubes.pbo.models.Pelanggan;
 import com.tubes.pbo.models.User;
 import com.tubes.pbo.repositories.TransaksiRepository;
 import com.tubes.pbo.repositories.PelangganRepository;
+import com.tubes.pbo.repositories.SparepartRepository;
+import com.tubes.pbo.models.Sparepart;
 import com.tubes.pbo.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -27,15 +29,23 @@ public class TransaksiController {
   @Autowired
   private UserRepository userRepository;
 
+  @Autowired
+  private SparepartRepository sparepartRepository;
+
   @PostMapping
-  public ResponseEntity<String> addTransaksi(@RequestBody Transaksi newTransaksi) {
-    transaksiRepository.save(newTransaksi);
-    return ResponseEntity.ok("Transaksi berhasil ditambahkan.");
-  } 
+  public String addTransaksi(@RequestBody Transaksi transaksi) {
+      transaksiRepository.save(transaksi);
+      return "redirect:/transaksi";
+  }
 
   @GetMapping("/all")
   public List<Transaksi> getAllTransaksi() {
-      return transaksiRepository.findAll();
+    return transaksiRepository.findAll();
+  }
+
+  @GetMapping("/sparepart")
+  public List<Sparepart> getAllSpareparts() {
+      return sparepartRepository.findAll();
   }
 
   @GetMapping("/{id}")
@@ -52,10 +62,10 @@ public class TransaksiController {
       transaksi.setCatatan(updatedTransaksi.getCatatan());
       transaksi.setStnk(updatedTransaksi.getStnk());
       transaksi.setMotor(updatedTransaksi.getMotor());
-      transaksi.setSparepart(updatedTransaksi.getSparepart());
       transaksi.setBiayaJasa(updatedTransaksi.getBiayaJasa());
       transaksi.setPelanggan(updatedTransaksi.getPelanggan());
       transaksi.setMekanik(updatedTransaksi.getMekanik());
+      transaksi.setSpareparts(updatedTransaksi.getSpareparts());
       transaksiRepository.save(transaksi);
       return ResponseEntity.ok("Transaksi berhasil diperbarui.");
     } else {
@@ -65,11 +75,12 @@ public class TransaksiController {
 
   @DeleteMapping("/{id}")
   public ResponseEntity<String> deleteTransaksi(@PathVariable int id) {
-    if (!transaksiRepository.existsById(id)) {
-      return ResponseEntity.status(404).body("Transaksi dengan ID " + id + " tidak ditemukan.");
+    if (transaksiRepository.existsById(id)) {
+      transaksiRepository.deleteById(id);
+      return ResponseEntity.ok("Transaksi berhasil dihapus.");
+    } else {
+      return ResponseEntity.notFound().build();
     }
-    transaksiRepository.deleteById(id);
-    return ResponseEntity.ok("Transaksi dengan ID " + id + " berhasil dihapus.");
   }
 
   @GetMapping("/pelanggan/{id}")
