@@ -6,6 +6,7 @@ import com.tubes.pbo.models.User;
 import com.tubes.pbo.repositories.TransaksiRepository;
 import com.tubes.pbo.repositories.PelangganRepository;
 import com.tubes.pbo.repositories.UserRepository;
+import com.tubes.pbo.repositories.SparepartRepository; // Tambahkan import ini
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,25 +14,32 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
-
 @RestController
 @RequestMapping("/transaksi")
 public class TransaksiController {
 
-  @Autowired
-  private TransaksiRepository transaksiRepository;
+    @Autowired
+    private TransaksiRepository transaksiRepository;
 
-  @Autowired
-  private PelangganRepository pelangganRepository;
+    @Autowired
+    private PelangganRepository pelangganRepository;
 
-  @Autowired
-  private UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
-  @PostMapping
-  public ResponseEntity<String> addTransaksi(@RequestBody Transaksi newTransaksi) {
-    transaksiRepository.save(newTransaksi);
-    return ResponseEntity.ok("Transaksi berhasil ditambahkan.");
-  } 
+    @Autowired
+    private SparepartRepository sparepartRepository;
+
+    @PostMapping
+    public ResponseEntity<String> addTransaksi(@RequestBody Transaksi newTransaksi) {
+        // Cek apakah sparepart ada di database
+        if (!sparepartRepository.existsByNama(newTransaksi.getSparepart())) {
+            return ResponseEntity.badRequest().body("Transaksi gagal: Sparepart tidak ditemukan.");
+        }
+
+        transaksiRepository.save(newTransaksi);
+        return ResponseEntity.ok("Transaksi berhasil ditambahkan.");
+    }
 
   @GetMapping("/all")
   public List<Transaksi> getAllTransaksi() {

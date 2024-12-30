@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface SparepartRepository extends JpaRepository<Sparepart, Integer> {
-    
+    boolean existsByNama(String nama);
 }
