@@ -71,7 +71,7 @@
       <h1 class="display-4">Form Tambah Transaksi</h1>
     </div>
     <div class="container mt-5">
-      <form action="/transaksi/" method="post"  id="addTransactionForm" class="bg-dark p-5 rounded">
+      <form action="/transaksi/" method="post" id="addTransactionForm" class="bg-dark p-5 rounded">
         <div class="mb-3">
           <label for="searchPelanggan" class="form-label">Cari Pelanggan:</label>
           <input type="text" id="searchPelanggan" class="form-control bg-dark text-light border-secondary" placeholder="Ketik nama pelanggan...">
@@ -84,22 +84,28 @@
           <input type="text" id="searchMekanik" class="form-control bg-dark text-light border-secondary" placeholder="Ketik username mekanik...">
           <ul id="mekanikList" class="list-group mt-2"></ul>
         </div>
+        <input type="hidden" id="mekanikId" name="mekanikId">
+
         <div class="mb-3">
           <label for="motor" class="form-label">Motor:</label>
           <input type="text" id="motor" name="motor" required class="form-control bg-dark text-light border-secondary">
         </div>
+
         <div class="mb-3">
           <label for="stnk" class="form-label">STNK:</label>
           <input type="text" id="stnk" name="stnk" required class="form-control bg-dark text-light border-secondary">
         </div>
+
         <div class="mb-3">
           <label for="catatan" class="form-label">Catatan:</label>
           <input type="text" id="catatan" name="catatan" required class="form-control bg-dark text-light border-secondary">
         </div>
+
         <div class="mb-3">
           <label for="biayaJasa" class="form-label">Biaya Jasa:</label>
           <input type="number" id="biayaJasa" name="biayaJasa" step="0.01" required class="form-control bg-dark text-light border-secondary">
         </div>
+
         <button type="submit" class="btn btn-custom w-100">Tambah Transaksi</button>
       </form>
     </div>
@@ -213,15 +219,25 @@
       document.getElementById('addTransactionForm').addEventListener('submit', async (e) => {
           e.preventDefault();
 
-        const catatan = document.getElementById('catatan').value;
-        const stnk = document.getElementById('stnk').value;
-        const motor = document.getElementById('motor').value;
+          const catatan = document.getElementById('catatan').value;
+          const stnk = document.getElementById('stnk').value;
+          const motor = document.getElementById('motor').value;
+          const biayaJasa = document.getElementById('biayaJasa').value;
+          const pelangganId = document.getElementById('pelangganId').value;
+          const mekanikId = document.getElementById('mekanikId').value;
+          const status = "on going";
+          const spareparts = Array.from(document.getElementsByName('spareparts[]')).map(input => input.value);
 
-        const biayaJasa = document.getElementById('biayaJasa').value;
-        const pelangganId = document.getElementById('pelangganId').value;
-        const mekanikId = document.getElementById('mekanikId').value;
-        const status = "on going";
-        const payload = { biayaJasa, status, catatan, mekanik: { id: mekanikId }, motor, pelanggan: { id: pelangganId }, stnk };
+          const payload = { 
+              status,
+              catatan, 
+              stnk, 
+              motor, 
+              biayaJasa, 
+              pelanggan: { id: pelangganId }, 
+              mekanik: { id: mekanikId }, 
+              sparepart: spareparts
+          };
 
           const response = await fetch(API_ADD_TRANSAKSI, {
               method: 'POST',

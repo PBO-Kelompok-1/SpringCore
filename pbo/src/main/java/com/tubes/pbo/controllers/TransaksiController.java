@@ -7,6 +7,7 @@ import com.tubes.pbo.models.CheckoutSparepart;
 import com.tubes.pbo.repositories.TransaksiRepository;
 import com.tubes.pbo.repositories.PelangganRepository;
 import com.tubes.pbo.repositories.CheckoutSparepartRepository;
+import com.tubes.pbo.repositories.SparepartRepository;
 import com.tubes.pbo.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
