@@ -4,6 +4,7 @@ package com.tubes.pbo.models;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
+import java.util.List;
 
 @Entity
 @Table(name = "transaksi")
@@ -26,13 +27,12 @@ public class Transaksi {
   @Column(name = "motor")
   private String motor;
   
-  @NotBlank
-  @Column(name = "sparepart")
-  private String sparepart;
-  
   @Column(name = "biaya_jasa")
   private double biayaJasa;
   
+  @Column(name = "status")
+  private String status;
+
   @ManyToOne
   @JoinColumn(name = "id_pelanggan", referencedColumnName = "id")
   private Pelanggan pelanggan;
@@ -40,6 +40,14 @@ public class Transaksi {
   @ManyToOne
   @JoinColumn(name = "id_mekanik", referencedColumnName = "id")
   private User mekanik;
+
+  @ManyToMany
+  @JoinTable(
+    name = "transaksi_sparepart",
+    joinColumns = @JoinColumn(name = "transaksi_id"),
+    inverseJoinColumns = @JoinColumn(name = "sparepart_id")
+  )
+  private List<Sparepart> spareparts;
 
   public void setPelangganId(int pelangganId) {
     this.pelanggan = new Pelanggan();
