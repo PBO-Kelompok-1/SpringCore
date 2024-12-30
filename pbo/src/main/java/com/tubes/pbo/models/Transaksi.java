@@ -30,6 +30,9 @@ public class Transaksi {
   @Column(name = "biaya_jasa")
   private double biayaJasa;
   
+  @Column(name = "status")
+  private String status;
+
   @ManyToOne
   @JoinColumn(name = "id_pelanggan", referencedColumnName = "id")
   private Pelanggan pelanggan;

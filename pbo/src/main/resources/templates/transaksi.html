@@ -79,19 +79,22 @@
         <thead>
           <tr>
             <th>ID</th>
-            <th>Catatan</th>
-            <th>STNK</th>
-            <th>Motor</th>
-            <th>Sparepart</th>
-            <th>Biaya Jasa</th>
             <th>Pelanggan</th>
             <th>Mekanik</th>
+            <th>STNK</th>
+            <th>Motor</th>
+            <th>Catatan</th>
+            <th>Sparepart</th>
+            <th>Biaya Jasa</th>
+            <th>Total Harga</th>
+            <th>Status</th>
+            <th>Aksi</th>
           </tr>
         </thead>
         <tbody id="transaksi-body">
           <!-- Data transaksi akan dimuat di sini -->
         </tbody>
-      </table>
+      </table>      
     </div>
 
     <footer class="text-center">
@@ -112,15 +115,21 @@
 
       transaksiList.forEach(transaksi => {
         const row = document.createElement('tr');
+        const spareparts = transaksi.spareparts.map(sparepart => `${sparepart.quantity}x ${sparepart.nama}`).join(', ');
         row.innerHTML = `
           <td>${transaksi.id}</td>
-          <td>${transaksi.catatan}</td>
-          <td>${transaksi.stnk}</td>
-          <td>${transaksi.motor}</td>
-          <td>${transaksi.sparepart}</td>
-          <td>${transaksi.biayaJasa}</td>
           <td>${transaksi.pelanggan ? transaksi.pelanggan.nama : '-'}</td>
           <td>${transaksi.mekanik ? transaksi.mekanik.username : '-'}</td>
+          <td>${transaksi.stnk}</td>
+          <td>${transaksi.motor}</td>
+          <td>${transaksi.catatan}</td>
+          <td>${spareparts && spareparts.length > 0 ? spareparts : '-'}</td>
+          <td>${transaksi.biayaJasa}</td>
+          <td>${transaksi.totalHarga}</td>
+          <td>${transaksi.status}</td>
+          <td>
+            <button class="btn btn-warning btn-sm" onclick="edit(${transaksi.id})">Edit</button>
+          </td>
         `;
         transaksiBody.appendChild(row);
       });
