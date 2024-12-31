@@ -29,7 +29,7 @@ public class SecurityConfig {
                 authorize
                     .requestMatchers("/admin/**").hasRole("ADMIN")
                     .requestMatchers("/users/**").hasRole("ADMIN")
-                    .requestMatchers("/mekanik/**").hasRole("MEKANIK")
+                    //.requestMatchers("/mekanik/**").hasRole("MEKANIK")
                     .requestMatchers("/transaksi/**").hasRole("ADMIN")
                     .requestMatchers("/dashboard/**").hasRole("ADMIN")
                     //.requestMatchers("/", "/login/**").anonymous() // kalo dah login ga bisa ke halaman login lagi tapi gatau kok gamauyak

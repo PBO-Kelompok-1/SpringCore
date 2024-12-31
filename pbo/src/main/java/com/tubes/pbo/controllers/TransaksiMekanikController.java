@@ -78,28 +78,38 @@ public class TransaksiMekanikController {
     }
     @PostMapping("/mekanik/add-sparepart")
     public String insertCheckoutSparepart(
-            @RequestParam("id-transaksi") Long transaksiId,
-            @RequestParam("id-sparepart") Long sparepartId,
-            @RequestParam("quantity") Integer quantity,
-            Model model) {
+        @RequestParam("id-transaksi") Long transaksiId,
+        @RequestParam("id-sparepart") Long sparepartId,
+        @RequestParam("quantity") Integer quantity,
+         Model model) {
+        
+            try {
+                 // Logging input yang diterima
+        System.out.println("==== Logging Data ====");
+        System.out.println("Transaksi ID: " + transaksiId);
+        System.out.println("Sparepart ID: " + sparepartId);
+        System.out.println("Quantity: " + quantity);
         
         // Cari transaksi berdasarkan ID
         Transaksi transaksi = transaksiRepository.findById(transaksiId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid transaksi ID: " + transaksiId));
-        
+                
         // Cari sparepart berdasarkan ID
         Sparepart sparepart = sparepartRepository.findById(sparepartId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid sparepart ID: " + sparepartId));
         
         // Validasi stok mencukupi
-        if (sparepart.getStok() < quantity) {
+        if (sparepart.getStok() <= quantity) {
+            System.out.println("Stok sparepart:"+ sparepart.getStok());
+            System.out.println("Quantity yang diinputkan: "+ quantity);
             throw new IllegalArgumentException("Stok sparepart tidak mencukupi");
         }
-        
+
         // Cek apakah sudah ada sparepart yang sama dalam transaksi ini
         Optional<CheckoutSparepart> existingCheckoutSparepart = checkoutSparepartRepository.findByTransaksiIdAndSparepartId(transaksiId.intValue(), sparepartId.intValue());
     
         if (existingCheckoutSparepart.isPresent()) {
+            System.out.println("Sparepart sudah ada dalam transaksi, update quantity.");
             // Jika sudah ada, update jumlahnya (quantity)
             CheckoutSparepart checkoutSparepart = existingCheckoutSparepart.get();
             checkoutSparepart.setQuantity(checkoutSparepart.getQuantity() + quantity);
@@ -110,7 +120,9 @@ public class TransaksiMekanikController {
     
             // Simpan perubahan CheckoutSparepart yang sudah diupdate
             checkoutSparepartRepository.save(checkoutSparepart);
+            System.out.println("Quantity dan stok berhasil diperbarui.");
         } else {
+            System.out.println("Sparepart baru, buat entri baru.");
             // Jika belum ada, buat entri baru
             // Kurangi stok sparepart
             sparepart.setStok(sparepart.getStok() - quantity);
@@ -123,9 +135,15 @@ public class TransaksiMekanikController {
             checkoutSparepart.setQuantity(quantity);
     
             checkoutSparepartRepository.save(checkoutSparepart);
+            System.out.println("Sparepart berhasil ditambahkan ke transaksi.");
         }
 
         return "redirect:/dashboard-mekanik";
+             } catch (Exception e) {
+                model.addAttribute("errorMessage", e.getMessage());
+                return "redirect:/dashboard-mekanik";
+             }
+        
     }
 
     @PutMapping("/transaksi-selesai/{id}")
@@ -136,7 +154,8 @@ public class TransaksiMekanikController {
         
         transaksi.setStatus("done");
         transaksiRepository.save(transaksi);
-
+        
+        System.out.println("Transaksi berhasil diselesaikan.");
         return "redirect:/dashboard-mekanik";
     }
 

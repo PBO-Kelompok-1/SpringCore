@@ -90,6 +90,17 @@ public class HomeController {
         return "admin/pelanggan"; 
     }
 
+    @GetMapping("/admin/sparepart-admin")
+    public String adminSparepartPage() {
+        return "admin/sparepart-admin"; 
+    }
+
+    @GetMapping("/transaksi-mekanik")
+    public String transaksiMekanik() {
+        return "transaksi-mekanik"; 
+    }
+
+
     @Controller
     public class ErrorController {
     

@@ -7,39 +7,8 @@
 
 <body class="">
   <div class="wrapper">
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <div class="sidebar-wrapper">
-          <div class="logo">
-            <a href="javascript:void(0)" class="simple-text logo-mini">
-              BJ
-            </a>
-            <a href="javascript:void(0)" class="simple-text logo-normal">
-              Bengkel Jawa
-            </a>
-          </div>
-          <ul class="nav">
-            <li>
-              <a href="/dashboard-mekanik">
-                <i class="tim-icons icon-chart-pie-36"></i>
-                <p>Dashboard</p>
-              </a>
-            </li>
-            <li>
-              <a href="/sparepart">
-                <i class="tim-icons icon-app"></i>
-                <p>Spareparts</p>
-              </a>
-            </li>
-            <li>
-              <a href="/admin/pelanggan">
-                <i class="tim-icons icon-single-02"></i>
-                <p>Pelanggan</p>
-              </a>
-            </li>
-          </ul>
-        </div>
-    </div>
+     <!-- Sidebar -->
+    <div th:insert="fragments/sidebar-mekanik :: sidebar"></div>
     <!-- End Sidebar -->
 
     <div class="main-panel">
@@ -93,13 +62,14 @@
                           <td class="py-2 px-4 text-center">
                             <button class="btn btn-warning px-2 py-2 text-sm add-sparepart"
                             th:data-transaksi-id="${transaksi.id}"
-                            >+ Sparepart</button>
+                            th:disabled="${transaksi.status == 'done'}">+ Sparepart</button>
                             <form th:action="@{/transaksi-selesai/{id}(id=${transaksi.id})}" method="post" class="inline-block">
                               <input type="hidden" name="_method" value="put" />
                               <button class="btn btn-success px-2 py-2 text-sm selesai-button"
                                       th:disabled="${transaksi.status == 'done'}">
                                   Selesaikan
                               </button>
+                            </form>                    
                           </form>
                           </td>
                         </tr>
