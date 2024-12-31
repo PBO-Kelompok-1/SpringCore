@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import com.tubes.pbo.models.Pelanggan;
+import com.tubes.pbo.repositories.PelangganRepository;
 
 
 
@@ -18,6 +20,11 @@ public class DatabaseSeeder implements CommandLineRunner {
 
   @Autowired
   private PasswordEncoder passwordEncoder;
+
+  @Autowired
+  private PelangganRepository pelangganRepository;
+
+
 
   @Override
   public void run(String... args) throws Exception {
@@ -43,5 +50,29 @@ public class DatabaseSeeder implements CommandLineRunner {
     } else {
       System.out.println("mekanik1 user already exists");
     }
+
+    if (pelangganRepository.findByNama("John Doe").isEmpty()) {
+      Pelanggan pelanggan1 = new Pelanggan();
+      pelanggan1.setNama("John Doe");
+      pelanggan1.setAlamat("Jl. Merdeka No. 1");
+      pelanggan1.setNo_hp("08123456789");
+      pelangganRepository.save(pelanggan1);
+      System.out.println("Pelanggan John Doe created");
+    } else {
+      System.out.println("Pelanggan John Doe already exists");
+    }
+    
+    if (pelangganRepository.findByNama("Jane Smith").isEmpty()) {
+      Pelanggan pelanggan2 = new Pelanggan();
+      pelanggan2.setNama("Jane Smith");
+      pelanggan2.setAlamat("Jl. Sudirman No. 2");
+      pelanggan2.setNo_hp("08987654321");
+      pelangganRepository.save(pelanggan2);
+      System.out.println("Pelanggan Jane Smith created");
+    } else {
+      System.out.println("Pelanggan Jane Smith already exists");
+    }
   }
+
+  
 }

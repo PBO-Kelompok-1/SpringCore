@@ -25,7 +25,7 @@ public class HomeController {
             if ("ADMIN".equals(role)) {
                 return "redirect:/dashboard";
             } else if ("MEKANIK".equals(role)) {
-                return "redirect:/dashboardmekanik";
+                return "redirect:/dashboard-mekanik";
             }
         } 
         return "index";
@@ -41,7 +41,7 @@ public class HomeController {
             if ("ADMIN".equals(role)) {
                 return "redirect:/dashboard";
             } else if ("MEKANIK".equals(role)) {
-                return "redirect:/dashboardmekanik";
+                return "redirect:/dashboard-mekanik";
             }
         }
         return "login"; // Jika belum login, tampilkan halaman login
@@ -64,10 +64,16 @@ public class HomeController {
         return "transaksi";
     }
 
-    @GetMapping("/dashboardmekanik")
-    public String  dashboardmekanik() {
-        return "dashboardmekanik";
+    @GetMapping("/transaksi/form")
+    public String transaksiForm() {
+        return "transaksiForm";
     }
+
+
+    // @GetMapping("/dashboardmekanik")
+    // public String  dashboardmekanik() {
+    //     return "dashboardmekanik";
+    // }
    
     @GetMapping("/admin/users")
     public String adminUsersPage() {
@@ -76,8 +82,24 @@ public class HomeController {
 
     @GetMapping("/admin/mechanics")
     public String adminMechanicsPage() {
-        return "admin/mekanik"; // Path ke templates/admin/users.html
+        return "admin/mekanik"; 
     }
+
+    @GetMapping("/admin/pelanggan")
+    public String adminPelangganPage() {
+        return "admin/pelanggan"; 
+    }
+
+    @GetMapping("/admin/sparepart-admin")
+    public String adminSparepartPage() {
+        return "admin/sparepart-admin"; 
+    }
+
+    @GetMapping("/transaksi-mekanik")
+    public String transaksiMekanik() {
+        return "transaksi-mekanik"; 
+    }
+
 
     @Controller
     public class ErrorController {

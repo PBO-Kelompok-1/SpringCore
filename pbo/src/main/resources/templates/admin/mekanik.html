@@ -1,55 +1,63 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Manage Mekanik</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-900 text-gray-200">
-  <div class="min-h-screen flex flex-col">
-  <!-- Header -->
-  <header class="bg-gray-800 p-4">
-    <h1 class="text-2xl font-bold">Admin Dashboard</h1>
-    <nav>
-      <ul class="flex space-x-4">
-        <li><a href="/dashboard" class="hover:text-gray-400">Dashboard</a></li>
-        <li><a href="/admin/mechanics" class="hover:text-gray-400">Mechanics</a></li>
-        <li><a href="/sparepart" class="hover:text-gray-400">Spareparts</a></li>
-        <li><a href="/admin/users" class="hover:text-gray-400">Users</a></li>
-        <li><a href="/admin/settings" class="hover:text-gray-400">Settings</a></li>
-        <li><a href="/logout" class="text-gray-300 hover:text-gray-400">Logout</a></li>
-      </ul>
-    </nav>
-  </header>
+<!DOCTYPE >
+<html lang="en" html xmlns:th="http://www.thymeleaf.org">
 
-  <main class="p-4 flex-grow">
-    <!-- Button Add Mekanik -->
-    <section id="mekanik" class="mb-8">
-      <h2 class="text-xl font-semibold mb-4">Manage Mekanik</h2>
-      <button id="open-add-mekanik-form" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 mb-4 rounded">Add Mekanik</button>
-      <!-- Tabel Mekanik -->
-        <table class="min-w-full bg-gray-800 border border-gray-700">
-          <thead>
-            <tr>
-              <th class="py-2 px-4 border-b border-gray-700 text-center">ID</th>
-              <th class="py-2 px-4 border-b border-gray-700 text-center">Username</th>
-              <th class="py-2 px-4 border-b border-gray-700 text-center">Actions</th>
-            </tr>
-          </thead>
-          <tbody id="mekanik-table-body">
-            <!-- Mekanik data will be populated here -->
-          </tbody>
-        </table>
-      </section>
-    </main>
+<!-- Header -->
+<div th:insert="fragments/header :: header"></div>
+<!-- End Header -->
 
-    <footer class="bg-gray-800 p-4 text-center">
-      <p>&copy; 2024 - Bengkel Jawa. All rights reserved.</p>
-  </footer>
+<body class="">
+  <div class="wrapper">
+    <!-- Sidebar -->
+    <div th:insert="fragments/sidebar :: sidebar"></div>
+    <!-- End Sidebar -->
+
+    <div class="main-panel">
+      <!-- Navbar -->
+      <div th:insert="fragments/navbar :: navbar"></div>
+      <!-- End Navbar -->
+
+      <!-- Content -->
+      <div class="content">
+        <div class="row">
+          <div class="col-lg-12 col-md-12">
+            <div class="card ">
+              <div class="card-header">
+                <h4 class="card-title">Mechanics List</h4>
+                <button id="open-add-mekanik-form" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 mb-4 rounded">Add Mekanik</button>
+              </div>
+
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table tablesorter " id="">
+                    <thead class=" text-primary">
+                      <tr>
+                        <th class="py-2 px-4 border-b border-gray-700 text-center">ID</th>
+                        <th class="py-2 px-4 border-b border-gray-700 text-center">Username</th>
+                        <th class="py-2 px-4 border-b border-gray-700 text-center">Aksi</th>
+                      </tr>
+                    </thead>
+                    <tbody id="mekanik-table-body">
+                      <!-- Mekanik data will be populated here -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- End Content -->
+
+      <!-- Footer -->
+      <div th:insert="fragments/footer :: footer"></div>
+      <!-- End Footer -->
+    </div>
   </div>
+  <!-- Theme Setting -->
+  <div th:insert="fragments/theme :: theme"></div>
+    <!-- End Theme Setting -->
 
-  <!-- Form Add/Edit Mekanik -->
+    <!-- Form Add/Edit Mekanik -->
   <div id="add-mekanik-form" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
     <div class="bg-gray-800 p-6 rounded-lg shadow-lg w-1/3">
       <h3 id="form-title" class="text-xl font-semibold mb-4">Add Mekanik</h3>
@@ -64,8 +72,8 @@
           <input type="password" id="password" name="password" class="w-full p-2 mt-2 bg-gray-700 text-white rounded" required>
         </div>
         <div class="flex justify-between">
-          <button type="submit" id="save-button" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">Save</button>
           <button type="button" id="close-add-form" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded">Cancel</button>
+          <button type="submit" id="save-button" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">Save</button>
         </div>
       </form>
     </div>
@@ -183,13 +191,13 @@
       tableBody.innerHTML = '';
       users.filter(user => user.role === 'MEKANIK').forEach(user => {
         const row = document.createElement('tr');
-        row.classList.add('bg-gray-700', 'border-b', 'border-gray-800');
+        row.classList.add('border-b', 'border-gray-800');
         row.innerHTML = `
           <td class="py-2 px-4 border-b border-gray-600 text-center">${user.id}</td>
           <td class="py-2 px-4 border-b border-gray-600 text-center">${user.username}</td>
           <td class="py-2 px-4 border-b border-gray-600 text-center">
-            <button onclick="editMekanik(${user.id}, '${user.username}')" class="bg-blue-500 hover:bg-blue-600 px-2 py-1 rounded">Edit</button>
-            <button onclick="openDeleteConfirmation(${user.id})" class="bg-red-500 hover:bg-red-600 px-2 py-1 rounded">Delete</button>
+            <button onclick="editMekanik(${user.id}, '${user.username}')" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded mr-2">Edit</button>
+            <button onclick="openDeleteConfirmation(${user.id})" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded">Delete</button>
           </td>
         `;
         tableBody.appendChild(row);
@@ -252,5 +260,21 @@
 
     loadMekanikData();
   </script>
+
+  <!--   Core JS Files   -->
+  <script src="/assets/js/core/jquery.min.js"></script>
+  <script src="/assets/js/core/popper.min.js"></script>
+  <script src="/assets/js/core/bootstrap.min.js"></script>
+  <script src="/assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+  <!-- Chart JS -->
+  <script src="/assets/js/plugins/chartjs.min.js"></script>
+  <!--  Notifications Plugin    -->
+  <script src="/assets/js/plugins/bootstrap-notify.js"></script>
+  <!-- Control Center for Black Dashboard: parallax effects, scripts for the example pages etc -->
+  <script src="/assets/js/black-dashboard.min.js?v=1.0.0"></script><!-- Black Dashboard DEMO methods, don't include it in your project! -->
+  <script src="/assets/demo/demo.js"></script>
+  <script src="/js/sidebar.js"></script>
+  <script src="/js/activeMenu.js"></script>
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
 </body>
 </html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div class="sidebar" th:fragment="sidebar">
+    <!--
+      Tip 1: You can change the color of the sidebar using: data-color="blue | green | orange | red"
+  -->
+<!-- Sidebar -->
+<div class="sidebar">
+    <div class="sidebar-wrapper">
+      <div class="logo">
+        <a href="javascript:void(0)" class="simple-text logo-mini">
+          BJ
+        </a>
+        <a href="javascript:void(0)" class="simple-text logo-normal">
+          Bengkel Jawa
+        </a>
+      </div>
+      <ul class="nav">
+        <li>
+          <a href="/dashboard-mekanik">
+            <i class="tim-icons icon-chart-pie-36"></i>
+            <p>Dashboard</p>
+          </a>
+        </li>
+        <li>
+          <a href="/sparepart">
+            <i class="tim-icons icon-app"></i>
+            <p>Spareparts</p>
+          </a>
+        </li>
+        <li>
+            <a href="/transaksi-mekanik">
+              <i class="tim-icons icon-basket-simple"></i>
+              <p>List Transaksi</p>
+            </a>
+          </li>
+      </ul>
+    </div>
+</div>
+<!-- End Sidebar -->

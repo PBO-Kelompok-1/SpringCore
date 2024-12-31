@@ -1,0 +1,185 @@
+<!DOCTYPE >
+<html lang="en" html xmlns:th="http://www.thymeleaf.org">
+
+<!-- Header -->
+<div th:insert="fragments/header :: header"></div>
+<!-- End Header -->
+
+<body class="">
+  <div class="wrapper">
+    <!-- Sidebar -->
+    <div th:insert="fragments/sidebar :: sidebar"></div>
+    <!-- End Sidebar -->
+
+    <div class="main-panel">
+      <!-- Navbar -->
+      <div th:insert="fragments/navbar :: navbar"></div>
+      <!-- End Navbar -->
+
+      <!-- Content -->
+      <div class="content">
+        <div class="row">
+          <div class="col-lg-12 col-md-12">
+            <div class="card ">
+              <div class="card-header">
+                <h4 class="card-title">Customer List</h4>
+              </div>
+
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table tablesorter " id="">
+                    <thead class=" text-primary">
+                      <tr>
+                        <th class="p-2 border-r border-gray-800 text-center">ID</th>
+                        <th class="p-2 border-r border-gray-800 text-center">Nama</th>
+                        <th class="p-2 border-r border-gray-800 text-center">No HP</th>
+                        <th class="p-2 border-r border-gray-800 text-center">Alamat</th>
+                        <th class="p-2 border-r border-gray-800 text-center">Aksi</th>
+                      </tr>
+                    </thead>
+                    <tbody id="pelanggan-table-body">
+                      <!-- pelanggan data will be populated here -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- End Content -->
+
+      <!-- Footer -->
+      <div th:insert="fragments/footer :: footer"></div>
+      <!-- End Footer -->
+    </div>
+  </div>
+  <!-- Theme Setting -->
+  <div th:insert="fragments/theme :: theme"></div>
+    <!-- End Theme Setting -->
+
+  <!-- Form Edit Pelanggan -->
+  <div id="edit-pelanggan-form" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+    <div class="bg-gray-800 p-6 rounded-lg shadow-lg w-1/3">
+      <h3 id="form-title" class="text-xl font-semibold mb-4">Edit Pelanggan</h3>
+      <form id="pelanggan-form">
+        <input type="hidden" id="pelanggan-id" name="pelanggan-id">
+        <div class="mb-4">
+          <label for="nama" class="block text-gray-200">Nama</label>
+          <input type="text" id="nama" name="nama" class="w-full p-2 mt-2 bg-gray-700 text-white rounded" required>
+        </div>
+        <div class="mb-4">
+          <label for="no_hp" class="block text-gray-200">No HP</label>
+          <input type="text" id="no_hp" name="no_hp" class="w-full p-2 mt-2 bg-gray-700 text-white rounded" required>
+        </div>
+        <div class="mb-4">
+          <label for="alamat" class="block text-gray-200">Alamat</label>
+          <input type="text" id="alamat" name="alamat" class="w-full p-2 mt-2 bg-gray-700 text-white rounded" required>
+        </div>
+        <div class="flex justify-between">
+          <button type="button" id="close-edit-form" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded">Cancel</button>
+          <button type="submit" id="save-button" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const API_GET_ALL_USERS = '/pelanggan';
+    const API_UPDATE_USER = '/pelanggan/';
+
+    const editPelangganForm = document.getElementById('edit-pelanggan-form');
+    const pelangganIdField = document.getElementById('pelanggan-id');
+
+    // Load Pelanggan Data
+    async function loadPelangganData() {
+      try {
+        const response = await fetch(API_GET_ALL_USERS);
+        if (!response.ok) throw new Error('Failed to fetch data');
+
+        const pelanggans = await response.json();
+        const tableBody = document.getElementById('pelanggan-table-body');
+        tableBody.innerHTML = '';
+
+        pelanggans.forEach(pelanggan => {
+          const row = document.createElement('tr');
+          row.classList.add('border-b', 'border-gray-800');
+          row.innerHTML = `
+            <td class="py-2 px-4 border-b border-gray-600 text-center">${pelanggan.id}</td>
+            <td class="py-2 px-4 border-b border-gray-600 text-center">${pelanggan.nama}</td>
+            <td class="py-2 px-4 border-b border-gray-600 text-center">${pelanggan.no_hp}</td>
+            <td class="py-2 px-4 border-b border-gray-600 text-center">${pelanggan.alamat}</td>
+            <td class="py-2 px-4 border-b border-gray-600 text-center">
+              <button onclick="editPelanggan(${pelanggan.id}, '${pelanggan.nama}', '${pelanggan.no_hp}', '${pelanggan.alamat}')" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">Edit</button>
+            </td>
+          `;
+          tableBody.appendChild(row);
+        });
+      } catch (error) {
+        console.error('Error loading pelanggan data:', error);
+      }
+    }
+
+    // Edit Pelanggan
+    function editPelanggan(id, nama, no_hp, alamat) {
+      pelangganIdField.value = id;
+      document.getElementById('nama').value = nama;
+      document.getElementById('no_hp').value = no_hp;
+      document.getElementById('alamat').value = alamat;
+      editPelangganForm.classList.remove('hidden');
+    }
+
+    // Save Edited Pelanggan
+    document.getElementById('pelanggan-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const id = pelangganIdField.value;
+      const payload = {
+        nama: document.getElementById('nama').value,
+        no_hp: document.getElementById('no_hp').value,
+        alamat: document.getElementById('alamat').value,
+      };
+
+      try {
+        const response = await fetch(API_UPDATE_USER + id, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+
+        if (response.ok) {
+          editPelangganForm.classList.add('hidden');
+          loadPelangganData();
+        } else {
+          alert('Gagal memperbarui pelanggan.');
+        }
+      } catch (error) {
+        console.error('Error updating pelanggan:', error);
+      }
+    });
+
+    // Close Edit Form
+    document.getElementById('close-edit-form').addEventListener('click', () => {
+      editPelangganForm.classList.add('hidden');
+    });
+
+    // Initial Load
+    loadPelangganData();
+  </script>
+
+  <!--   Core JS Files   -->
+  <script src="/assets/js/core/jquery.min.js"></script>
+  <script src="/assets/js/core/popper.min.js"></script>
+  <script src="/assets/js/core/bootstrap.min.js"></script>
+  <script src="/assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+  <!-- Chart JS -->
+  <script src="/assets/js/plugins/chartjs.min.js"></script>
+  <!--  Notifications Plugin    -->
+  <script src="/assets/js/plugins/bootstrap-notify.js"></script>
+  <!-- Control Center for Black Dashboard: parallax effects, scripts for the example pages etc -->
+  <script src="/assets/js/black-dashboard.min.js?v=1.0.0"></script><!-- Black Dashboard DEMO methods, don't include it in your project! -->
+  <script src="/assets/demo/demo.js"></script>
+  <script src="/js/sidebar.js"></script>
+  <script src="/js/activeMenu.js"></script>
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
+</body>
+</html>

@@ -22,7 +22,7 @@ public class CustomAuthenticationHandler implements AuthenticationSuccessHandler
             response.sendRedirect("/dashboard");
         } else if (authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_MEKANIK"))) {
             // Redirect ke dashboard mekanik
-            response.sendRedirect("/dashboardmekanik");
+            response.sendRedirect("/dashboard-mekanik");
         } else {
             // Default redirect (jika role tidak dikenal)
             response.sendRedirect("/");
