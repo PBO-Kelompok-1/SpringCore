@@ -71,10 +71,24 @@
       <h1 class="display-4">Form Tambah Transaksi</h1>
     </div>
     <div class="container mt-5">
-      <form action="/transaksi/" method="post"  id="addTransactionForm" class="bg-dark p-5 rounded">
+      <form action="/transaksi" method="post" id="addTransactionForm" class="bg-dark p-5 rounded">
         <div class="mb-3">
-          <label for="catatan" class="form-label">Catatan:</label>
-          <input type="text" id="catatan" name="catatan" required class="form-control bg-dark text-light border-secondary">
+          <label for="searchPelanggan" class="form-label">Cari Pelanggan:</label>
+          <input type="text" id="searchPelanggan" class="form-control bg-dark text-light border-secondary" placeholder="Ketik nama pelanggan...">
+          <ul id="pelangganList" class="list-group mt-2"></ul>
+        </div>
+        <input type="hidden" id="pelangganId" name="pelangganId">
+
+        <div class="mb-3">
+          <label for="searchMekanik" class="form-label">Cari Mekanik:</label>
+          <input type="text" id="searchMekanik" class="form-control bg-dark text-light border-secondary" placeholder="Ketik username mekanik...">
+          <ul id="mekanikList" class="list-group mt-2"></ul>
+        </div>
+        <input type="hidden" id="mekanikId" name="mekanikId">
+
+        <div class="mb-3">
+          <label for="motor" class="form-label">Motor:</label>
+          <input type="text" id="motor" name="motor" required class="form-control bg-dark text-light border-secondary">
         </div>
 
         <div class="mb-3">
@@ -83,45 +97,52 @@
         </div>
 
         <div class="mb-3">
-          <label for="motor" class="form-label">Motor:</label>
-          <input type="text" id="motor" name="motor" required class="form-control bg-dark text-light border-secondary">
-        </div>
-
-        <div class="mb-3">
-          <label for="sparepart" class="form-label">Sparepart:</label>
-          <input type="text" id="sparepart" name="sparepart" required class="form-control bg-dark text-light border-secondary">
+          <label for="catatan" class="form-label">Catatan:</label>
+          <input type="text" id="catatan" name="catatan" required class="form-control bg-dark text-light border-secondary">
         </div>
 
         <div class="mb-3">
           <label for="biayaJasa" class="form-label">Biaya Jasa:</label>
           <input type="number" id="biayaJasa" name="biayaJasa" step="0.01" required class="form-control bg-dark text-light border-secondary">
         </div>
-
-        <div class="mb-3">
-          <label for="searchPelanggan" class="form-label">Cari Pelanggan:</label>
-          <input type="text" id="searchPelanggan" class="form-control bg-dark text-light border-secondary" placeholder="Ketik nama pelanggan...">
-          <ul id="pelangganList" class="list-group mt-2"></ul>
-        </div>
-        <input type="hidden" id="pelangganId" name="pelangganId">
-        <input type="hidden" id="mekanikId" name="mekanikId">
-        <div class="mb-3">
-          <label for="searchMekanik" class="form-label">Cari Mekanik:</label>
-          <input type="text" id="searchMekanik" class="form-control bg-dark text-light border-secondary" placeholder="Ketik username mekanik...">
-          <ul id="mekanikList" class="list-group mt-2"></ul>
-        </div>
-
-        <button type="submit" class="btn btn-custom w-100">Tambah Transaksi</button>
+        <input type="hidden" id="status" name="status" value="on going">
+        <button type="button" onclick="submitForm()" class="btn btn-custom w-100">Tambah Transaksi</button>
       </form>
     </div>
 
     <footer class="text-center mt-5">
       <p>&copy; 2024 Bengkel Jawa - Kelompok 1 PBO. All Rights Reserved.</p>
     </footer>
-
+    <script>
+      async function submitForm() {
+          const form = document.getElementById('addTransactionForm');
+          const formData = new FormData(form);
+          const jsonData = {};
+  
+          formData.forEach((value, key) => {
+              jsonData[key] = value;
+          });
+  
+          const response = await fetch('/transaksi', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(jsonData)
+          });
+  
+          if (response.ok) {
+              alert('Transaksi berhasil ditambahkan.');
+          } else {
+              alert('Gagal menambahkan transaksi.');
+          }
+      }
+    </script>
     <script>
       const API_ADD_TRANSAKSI = '/transaksi';
       const API_GET_ALL_PELANGGAN = '/pelanggan';
       const API_GET_ALL_MEKANIK = '/users/all';
+      const API_GET_ALL_SPAREPART = '/transaksi/sparepart';
 
       const searchPelanggan = document.getElementById('searchPelanggan');
       const pelangganList = document.getElementById('pelangganList');
@@ -129,9 +150,21 @@
       const searchMekanik = document.getElementById('searchMekanik');
       const mekanikList = document.getElementById('mekanikList');
 
+      const searchSparepart = document.getElementById('searchSparepart');
+      const sparepartList = document.getElementById('sparepartList');
+      const selectedSpareparts = document.getElementById('selectedSpareparts');
+
       async function fetchData(url) {
-        const response = await fetch(url);
-        return await response.json();
+        try {
+          const response = await fetch(url);
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return await response.json();
+        } catch (error) {
+          console.error('Error fetching data:', error);
+          return [];
+        }
       }
 
       async function liveSearch(input, list, apiUrl, propertyName, idField) {
@@ -147,13 +180,15 @@
 
           filtered.forEach(item => {
             const li = document.createElement('li');
-            li.textContent = item[propertyName];
             li.className = 'list-group-item list-group-item-action bg-dark text-light';
+            li.innerHTML = `<span>${item[propertyName]}</span>`;
+
             li.addEventListener('click', () => {
-              input.value = item[propertyName];
               document.getElementById(idField).value = item.id;
+              input.value = item[propertyName];
               list.innerHTML = '';
             });
+
             list.appendChild(li);
           });
         }
@@ -167,32 +202,79 @@
         liveSearch(searchMekanik, mekanikList, API_GET_ALL_MEKANIK, 'username', 'mekanikId')
       );
 
-      document.getElementById('addTransactionForm').addEventListener('submit', async (e) => {
+      searchSparepart.addEventListener('input', async () => {
+        const query = searchSparepart.value.toLowerCase();
+        sparepartList.innerHTML = '';
+
+        if (query.length > 0) {
+          const data = await fetchData(API_GET_ALL_SPAREPART);
+
+          const filtered = data.filter(item =>
+            item.nama.toLowerCase().includes(query)
+          );
+
+          filtered.forEach(item => {
+            const li = document.createElement('li');
+            li.className = 'list-group-item list-group-item-action bg-dark text-light d-flex justify-content-between align-items-center';
+            li.innerHTML = `
+              <span>${item.nama}</span>
+              <button type="button" class="btn btn-sm btn-success" onclick="addSparepart(${item.id}, '${item.nama}')">Tambah</button>
+            `;
+            sparepartList.appendChild(li);
+          });
+        }
+      });
+
+      function addSparepart(id, name) {
+        const div = document.createElement('div');
+        div.className = 'mb-2';
+        div.innerHTML = `
+          <input type="hidden" name="spareparts[]" value="${id}">
+          <span>${name}</span>
+          <button type="button" class="btn btn-danger btn-sm ms-2" onclick="removeSparepart(this)">Remove</button>
+        `;
+        selectedSpareparts.appendChild(div);
+      }
+
+      function removeSparepart(button) {
+        button.parentElement.remove();
+    }
+
+    document.getElementById('addTransactionForm').addEventListener('submit', async (e) => {
         e.preventDefault();
 
         const catatan = document.getElementById('catatan').value;
         const stnk = document.getElementById('stnk').value;
         const motor = document.getElementById('motor').value;
-        const sparepart = document.getElementById('sparepart').value;
         const biayaJasa = document.getElementById('biayaJasa').value;
         const pelangganId = document.getElementById('pelangganId').value;
         const mekanikId = document.getElementById('mekanikId').value;
+        const status = document.getElementById('status').value;
+        const spareparts = Array.from(document.getElementsByName('spareparts[]')).map(input => input.value);
 
-        const payload = { catatan, stnk, motor, sparepart, biayaJasa, pelanggan: { id: pelangganId }, mekanik: { id: mekanikId } };
+        const payload = { 
+            status,
+            catatan, 
+            stnk, 
+            motor, 
+            biayaJasa, 
+            pelanggan: { id: pelangganId }, 
+            mekanik: { id: mekanikId }, 
+            sparepart: spareparts
+        };
 
-        const response = await fetch(API_ADD_TRANSAKSI, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
+        const response = await fetch('/transaksi', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
         });
 
         if (response.ok) {
-          alert('Transaksi berhasil ditambahkan.');
-          window.location.reload();
+            alert('Transaksi berhasil ditambahkan.');
         } else {
-          alert('Gagal menambahkan transaksi.');
+            alert('Gagal menambahkan transaksi.');
         }
-      });
+    });
     </script>
   </body>
 </html>

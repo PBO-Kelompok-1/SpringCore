@@ -25,7 +25,7 @@ public class HomeController {
             if ("ADMIN".equals(role)) {
                 return "redirect:/dashboard";
             } else if ("MEKANIK".equals(role)) {
-                return "redirect:/dashboardmekanik";
+                return "redirect:/dashboard-mekanik";
             }
         } 
         return "index";
@@ -41,7 +41,7 @@ public class HomeController {
             if ("ADMIN".equals(role)) {
                 return "redirect:/dashboard";
             } else if ("MEKANIK".equals(role)) {
-                return "redirect:/dashboardmekanik";
+                return "redirect:/dashboard-mekanik";
             }
         }
         return "login"; // Jika belum login, tampilkan halaman login
@@ -70,10 +70,10 @@ public class HomeController {
     }
 
 
-    @GetMapping("/dashboardmekanik")
-    public String  dashboardmekanik() {
-        return "dashboardmekanik";
-    }
+    // @GetMapping("/dashboardmekanik")
+    // public String  dashboardmekanik() {
+    //     return "dashboardmekanik";
+    // }
    
     @GetMapping("/admin/users")
     public String adminUsersPage() {

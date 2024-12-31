@@ -26,13 +26,12 @@ public class Transaksi {
   @Column(name = "motor")
   private String motor;
   
-  @NotBlank
-  @Column(name = "sparepart")
-  private String sparepart;
-  
   @Column(name = "biaya_jasa")
   private double biayaJasa;
   
+  @Column(name = "status")
+  private String status;
+
   @ManyToOne
   @JoinColumn(name = "id_pelanggan", referencedColumnName = "id")
   private Pelanggan pelanggan;
@@ -40,14 +39,4 @@ public class Transaksi {
   @ManyToOne
   @JoinColumn(name = "id_mekanik", referencedColumnName = "id")
   private User mekanik;
-
-  public void setPelangganId(int pelangganId) {
-    this.pelanggan = new Pelanggan();
-    this.pelanggan.setId(pelangganId);
-  }
-
-  public void setMekanikId(int mekanikId) {
-    this.mekanik = new User();
-    this.mekanik.setId((long) mekanikId);
-  }
 }
