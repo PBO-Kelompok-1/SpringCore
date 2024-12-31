@@ -6,5 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface SparepartRepository extends JpaRepository<Sparepart, Integer> {
-    
+    Optional<Sparepart> findById(Long sparepartId);
+    Optional<Sparepart> findByNama(String nama);
 }
