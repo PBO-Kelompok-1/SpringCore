@@ -1,0 +1,268 @@
+<!DOCTYPE >
+<html lang="en" html xmlns:th="http://www.thymeleaf.org">
+
+<!-- Header -->
+<div th:insert="fragments/header :: header"></div>
+<!-- End Header -->
+
+<body class="">
+  <div class="wrapper">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-wrapper">
+          <div class="logo">
+            <a href="javascript:void(0)" class="simple-text logo-mini">
+              BJ
+            </a>
+            <a href="javascript:void(0)" class="simple-text logo-normal">
+              Bengkel Jawa
+            </a>
+          </div>
+          <ul class="nav">
+            <li>
+              <a href="/dashboard-mekanik">
+                <i class="tim-icons icon-chart-pie-36"></i>
+                <p>Dashboard</p>
+              </a>
+            </li>
+            <li>
+              <a href="/sparepart">
+                <i class="tim-icons icon-app"></i>
+                <p>Spareparts</p>
+              </a>
+            </li>
+            <li>
+              <a href="/admin/pelanggan">
+                <i class="tim-icons icon-single-02"></i>
+                <p>Pelanggan</p>
+              </a>
+            </li>
+          </ul>
+        </div>
+    </div>
+    <!-- End Sidebar -->
+
+    <div class="main-panel">
+      <!-- Navbar -->
+      <div th:insert="fragments/navbar :: navbar"></div>
+      <!-- End Navbar -->
+
+      <!-- Content -->
+      <div class="content">
+        <div class="row">
+          <div class="col-lg-12 col-md-12">
+            <div class="card ">
+              <div class="card-header">
+                <h4 class="card-title" th:text="'Transaction List - ' + ${username}"></h4>
+              </div>
+
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table tablesorter " id="">
+                    <thead class=" text-primary"> 
+                      <tr>
+                        <th class="py-2 px-4 border-b border-gray-700 text-center">ID</th>
+                        <th class="py-2 px-4 border-b border-gray-700 text-center">Pelanggan</th>
+                        <th class="py-2 px-4 border-b border-gray-700 text-center">Catatan</th>
+                        <th class="py-2 px-4 border-b border-gray-700 text-center">STNK</th>
+                        <th class="py-2 px-4 border-b border-gray-700 text-center">Motor</th>
+                        <th class="py-2 px-4 border-b border-gray-700 text-center">Sparepart</th>
+                        <th class="py-2 px-4 border-b border-gray-700 text-center">Biaya Jasa</th>
+                        <th class="py-2 px-4 border-b border-gray-700 text-center">Biaya Total</th>
+                        <th class="py-2 px-4 border-b border-gray-700 text-center">Aksi</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Loop untuk menampilkan transaksi -->
+                        <tr th:each="transaksi : ${transaksiList}">
+                          <td th:text="${transaksi.id}" class="py-2 px-4 text-center"></td>
+                          <td th:text="${transaksi.pelanggan.nama}" class="py-2 px-4 text-center"></td>
+                          <td th:text="${transaksi.catatan}" class="py-2 px-4 text-center"></td>
+                          <td th:text="${transaksi.stnk}" class="py-2 px-4 text-center"></td>
+                          <td th:text="${transaksi.motor}" class="py-2 px-4 text-center"></td>
+                          <td class="py-2 px-4 text-center">
+                            <!-- Loop untuk menampilkan sparepart yang terkait dengan transaksi -->
+                            <span th:each="transaksiSparepart : ${transaksiSparepartList}" 
+                                  th:if="${transaksiSparepart.transaksi.id == transaksi.id}">
+                              <span th:text="${transaksiSparepart.sparepart.nama}"></span> |
+                              <span th:text="${transaksiSparepart.quantity}"></span> buah<br>
+                            </span>
+                          </td>
+                          <td th:text="${transaksi.biayaJasa}" class="py-2 px-4 text-center"></td>
+                          <td th:text="${biayaTotalMap[transaksi.id]}" class="py-2 px-4 text-center"></td>
+                          <td class="py-2 px-4 text-center">
+                            <button class="btn btn-warning px-2 py-2 text-sm add-sparepart"
+                            th:data-transaksi-id="${transaksi.id}"
+                            >+ Sparepart</button>
+                            <form th:action="@{/transaksi-selesai/{id}(id=${transaksi.id})}" method="post" class="inline-block">
+                              <input type="hidden" name="_method" value="put" />
+                              <button class="btn btn-success px-2 py-2 text-sm selesai-button"
+                                      th:disabled="${transaksi.status == 'done'}">
+                                  Selesaikan
+                              </button>
+                          </form>
+                          </td>
+                        </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- End Content -->
+
+      <!-- Footer -->
+      <div th:insert="fragments/footer :: footer"></div>
+      <!-- End Footer -->
+    </div>
+  </div>
+  <!-- Theme Setting -->
+  <div th:insert="fragments/theme :: theme"></div>
+    <!-- End Theme Setting -->
+
+    <!-- Add Sparepart Form -->
+    <div id="add-sparepart-form" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+      <div class="bg-gray-800 p-6 rounded-lg shadow-lg w-1/3">
+          <h3 class="text-xl font-semibold mb-4">Add Sparepart</h3>
+          <form th:action="@{/mekanik/add-sparepart}" method="post">
+          <div class="mb-4">
+              <input type="hidden" id="id-transaksi" name="id-transaksi" class="w-full p-2 mt-2 bg-gray-700 text-white rounded" required>
+          </div>
+          <div class="mb-4">
+                <label for="id-sparepart" class="block text-gray-200">Sparepart</label>
+                <select id="id-sparepart" name="id-sparepart" 
+                        class="w-full p-2 mt-2 bg-gray-700 text-white rounded" required>
+                    <!-- Iterasi opsi berdasarkan data sparepart -->
+                    <option value="" disabled selected>-- Pilih Sparepart --</option>
+                    <option th:each="sparepart : ${spareparts}" 
+                            th:value="${sparepart.id}" 
+                            th:text="${sparepart.nama}">
+                    </option>
+                </select>
+            </div>
+          <div class="mb-4">
+              <label for="quantity" class="block text-gray-200">Quantity</label>
+              <input type="number" id="quantity" name="quantity" class="w-full p-2 mt-2 bg-gray-700 text-white rounded" required>
+          </div>
+          <div class="flex justify-between">
+              <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">Add</button>
+              <button type="button" id="close-add-form" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded">Cancel</button>
+          </div>
+          </form>
+      </div>
+    </div>
+
+        <!-- Notification Modal -->
+    <div id="notification-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-gray-800 p-4 rounded-lg shadow-lg w-1/3">
+        <p id="notification-message" class="text-center text-lg text-white"></p>
+        <div class="mt-4 flex justify-center">
+            <button id="close-notification" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">OK</button>
+        </div>
+        </div>
+    </div>
+
+    <!-- Selesai Confirmation Modal -->
+    <div id="selesai-confirmation-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-gray-800 p-6 rounded-lg shadow-lg w-1/3">
+        <h3 class="text-xl font-semibold mb-4 text-white">Konfirmasi Selesai</h3>
+        <p class="mb-4 text-gray-300">Apakah anda yakin ingin menyelesaikan transaksi ini?</p>
+        <div class="flex justify-between">
+            <button id="confirm-selesai" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">Selesaikan</button>
+            <button id="cancel-selesai" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded">Cancel</button>
+        </div>
+        </div>
+    </div>
+    <script>
+        // Function to show notification
+        function showNotification(message) {
+          const notificationModal = document.getElementById("notification-modal");
+          const notificationMessage = document.getElementById("notification-message");
+      
+          notificationMessage.textContent = message;
+          notificationModal.classList.remove("hidden");
+      
+          document.getElementById("close-notification").onclick = function () {
+            notificationModal.classList.add("hidden");
+          };
+        }
+      
+        // Show add Sparepart Form and Populate Data
+        document.querySelectorAll(".add-sparepart").forEach(button => {
+          button.addEventListener("click", function() {
+            const idTraksaksi = this.getAttribute("data-transaksi-id");
+      
+            document.getElementById("id-transaksi").value = idTraksaksi;
+      
+            const form = document.querySelector("#add-sparepart-form form");
+            // form.setAttribute("action", `/sparepart/${id}`);
+      
+            document.getElementById("add-sparepart-form").classList.remove("hidden");
+          });
+        });
+      
+        // Close add Sparepart Form
+        document.getElementById("close-add-form").addEventListener("click", function() {
+          document.getElementById("add-sparepart-form").classList.add("hidden");
+        });
+      
+        const addForm = document.querySelector("#add-sparepart-form form");
+        addForm.addEventListener("submit", function(event) {
+        event.preventDefault(); // Prevent default form submission
+        
+        document.getElementById("add-sparepart-form").classList.add("hidden");
+        showNotification("Sparepart successfully added!");
+
+        const form = this; // Save the current form reference
+        setTimeout(function() {
+            form.submit(); // Use the saved form reference to submit
+        }, 2000);
+        });
+
+      
+        // Handle Selesai Confirmation
+        document.querySelectorAll(".selesai-button").forEach(button => {
+          button.addEventListener("click", function(event) {
+            event.preventDefault(); // Prevent immediate form submission
+            const form = this.closest("form"); // Get the form element
+            document.getElementById("selesai-confirmation-modal").classList.remove("hidden");
+      
+            // Confirm selesai
+            document.getElementById("confirm-selesai").onclick = function() {
+                document.getElementById("selesai-confirmation-modal").classList.add("hidden");
+                showNotification("Transaksi berhasil diselesaikan!");
+                // Tambahkan jeda waktu sebelum submit form
+                setTimeout(function() {
+                    form.submit();
+                }, 2000);
+
+            };
+
+      
+            // Cancel selesai
+            document.getElementById("cancel-selesai").onclick = function() {
+              document.getElementById("selesai-confirmation-modal").classList.add("hidden");
+            };
+          });
+        });
+      </script>
+
+  <!--   Core JS Files   -->
+  <script src="/assets/js/core/jquery.min.js"></script>
+  <script src="/assets/js/core/popper.min.js"></script>
+  <script src="/assets/js/core/bootstrap.min.js"></script>
+  <script src="/assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+  <!-- Chart JS -->
+  <script src="/assets/js/plugins/chartjs.min.js"></script>
+  <!--  Notifications Plugin    -->
+  <script src="/assets/js/plugins/bootstrap-notify.js"></script>
+  <!-- Control Center for Black Dashboard: parallax effects, scripts for the example pages etc -->
+  <script src="/assets/js/black-dashboard.min.js?v=1.0.0"></script><!-- Black Dashboard DEMO methods, don't include it in your project! -->
+  <script src="/assets/demo/demo.js"></script>
+  <script src="/js/sidebar.js"></script>
+  <script src="/js/activeMenu.js"></script>
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
+</body>
+</html>

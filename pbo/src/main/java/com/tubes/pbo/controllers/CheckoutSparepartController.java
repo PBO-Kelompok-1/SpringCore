@@ -48,7 +48,7 @@ public class CheckoutSparepartController {
         Sparepart sparepart = sparepartOptional.get();
         
         // Validasi stok sparepart
-        if (Integer.parseInt(sparepart.getStok()) < checkoutSparepart.getQuantity()) {
+        if (sparepart.getStok() < checkoutSparepart.getQuantity()) {
             return ResponseEntity.status(400).body(null); // Stok tidak cukup
         }
     
@@ -66,16 +66,16 @@ public class CheckoutSparepartController {
             checkoutSparepartRepository.save(currentCheckoutSparepart);
     
             // Kurangi stok sparepart
-            int newStok = Integer.parseInt(sparepart.getStok()) - checkoutSparepart.getQuantity();
-            sparepart.setStok(String.valueOf(newStok));
+            int newStok = sparepart.getStok() - checkoutSparepart.getQuantity();
+            sparepart.setStok(newStok);
             sparepartRepository.save(sparepart); // Simpan perubahan stok sparepart
     
             return ResponseEntity.ok(currentCheckoutSparepart); // Kembalikan data yang sudah diperbarui
         } else {
             // Jika belum ada, simpan CheckoutSparepart baru
             // Kurangi stok sparepart
-            int newStok = Integer.parseInt(sparepart.getStok()) - checkoutSparepart.getQuantity();
-            sparepart.setStok(String.valueOf(newStok));
+            int newStok = sparepart.getStok() - checkoutSparepart.getQuantity();
+            sparepart.setStok(newStok);
             sparepartRepository.save(sparepart); // Simpan perubahan stok sparepart
     
             // Set kembali objek transaksi dan sparepart dari database

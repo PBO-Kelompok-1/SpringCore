@@ -2,16 +2,14 @@ package com.tubes.pbo.controllers;
 
 import com.tubes.pbo.models.Transaksi;
 import com.tubes.pbo.models.Pelanggan;
-import com.tubes.pbo.models.Sparepart;
 import com.tubes.pbo.models.User;
 import com.tubes.pbo.models.CheckoutSparepart;
 import com.tubes.pbo.repositories.TransaksiRepository;
 import com.tubes.pbo.repositories.PelangganRepository;
 import com.tubes.pbo.repositories.CheckoutSparepartRepository;
-import com.tubes.pbo.repositories.SparepartRepository;
 import com.tubes.pbo.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+// import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,9 +35,6 @@ public class TransaksiController {
 
   @Autowired
   private UserRepository userRepository;
-
-  @Autowired
-  private SparepartRepository sparepartRepository;
 
   @PostMapping
   public String addTransaksi(@RequestBody Transaksi transaksi) {
@@ -80,7 +75,7 @@ public class TransaksiController {
   
           // Menyusun sparepart dalam format yang sesuai dan menghitung total harga sparepart
           double totalHargaSparepart = checkoutSpareparts.stream()
-                  .mapToDouble(cs -> cs.getQuantity() * Double.parseDouble(cs.getSparepart().getHarga()))
+                  .mapToDouble(cs -> cs.getQuantity() * cs.getSparepart().getHarga())
                   .sum(); // Total harga sparepart
           
           // Menyusun list sparepart

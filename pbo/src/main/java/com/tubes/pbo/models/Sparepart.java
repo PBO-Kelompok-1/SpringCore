@@ -1,6 +1,6 @@
 package com.tubes.pbo.models;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.persistence.*; 
+import jakarta.validation.constraints.*;
 import lombok.Data;
 
 @Entity
@@ -21,10 +21,12 @@ public class Sparepart {
     private String deskripsi;
 
     @Column(name = "harga")
-    @NotBlank(message = "Harga tidak boleh kosong.")
-    private String harga;
+    @NotNull(message = "Harga tidak boleh kosong.")
+    @Positive(message = "Harga harus lebih besar dari 0.")
+    private double harga;
     
     @Column(name = "stok")
-    @NotBlank(message = "Stok tidak boleh kosong.")
-    private String stok;
+    @NotNull(message = "Stok tidak boleh kosong.") 
+    @Min(value = 1, message = "Stok harus lebih besar dari 0.")
+    private int stok;
 }
