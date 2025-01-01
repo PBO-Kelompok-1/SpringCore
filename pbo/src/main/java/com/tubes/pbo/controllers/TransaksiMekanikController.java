@@ -83,8 +83,9 @@ public class TransaksiMekanikController {
         @RequestParam("quantity") Integer quantity,
          Model model) {
         
+        //pake try catch biar ga ke whitelable page
             try {
-                 // Logging input yang diterima
+        // Logging input yang diterima (buat debugging)
         System.out.println("==== Logging Data ====");
         System.out.println("Transaksi ID: " + transaksiId);
         System.out.println("Sparepart ID: " + sparepartId);
@@ -99,7 +100,7 @@ public class TransaksiMekanikController {
                 .orElseThrow(() -> new IllegalArgumentException("Invalid sparepart ID: " + sparepartId));
         
         // Validasi stok mencukupi
-        if (sparepart.getStok() <= quantity) {
+        if (sparepart.getStok() < quantity) {
             System.out.println("Stok sparepart:"+ sparepart.getStok());
             System.out.println("Quantity yang diinputkan: "+ quantity);
             throw new IllegalArgumentException("Stok sparepart tidak mencukupi");
@@ -126,8 +127,10 @@ public class TransaksiMekanikController {
             // Jika belum ada, buat entri baru
             // Kurangi stok sparepart
             sparepart.setStok(sparepart.getStok() - quantity);
+            System.out.println("Dikurangi tapi belum disimpen.");
             sparepartRepository.save(sparepart); // Simpan perubahan stok ke database
-    
+            
+            System.out.println("Berhasil  update di repo sparepart (berhasil kurangi jumlah).");
             // Buat objek CheckoutSparepart baru
             CheckoutSparepart checkoutSparepart = new CheckoutSparepart();
             checkoutSparepart.setTransaksi(transaksi);
@@ -141,7 +144,7 @@ public class TransaksiMekanikController {
         return "redirect:/dashboard-mekanik";
              } catch (Exception e) {
                 model.addAttribute("errorMessage", e.getMessage());
-                return "redirect:/dashboard-mekanik";
+                return "redirect:/dashboard-mekanikss";
              }
         
     }

@@ -22,7 +22,7 @@
           <div class="col-lg-12 col-md-12">
             <div class="card ">
               <div class="card-header">
-                <h4 class="card-title" th:text="'Transaction List - ' + ${username}"></h4>
+                <h4 class="card-title" th:text="'List Transaksi - ' + ${username}"></h4>
               </div>
 
               <div class="card-body">
@@ -51,14 +51,15 @@
                           <td th:text="${transaksi.motor}" class="py-2 px-4 text-center"></td>
                           <td class="py-2 px-4 text-center">
                             <!-- Loop untuk menampilkan sparepart yang terkait dengan transaksi -->
-                            <span th:each="transaksiSparepart : ${transaksiSparepartList}" 
-                                  th:if="${transaksiSparepart.transaksi.id == transaksi.id}">
-                              <span th:text="${transaksiSparepart.sparepart.nama}"></span> |
-                              <span th:text="${transaksiSparepart.quantity}"></span> buah<br>
-                            </span>
-                          </td>
-                          <td th:text="${transaksi.biayaJasa}" class="py-2 px-4 text-center"></td>
-                          <td th:text="${biayaTotalMap[transaksi.id]}" class="py-2 px-4 text-center"></td>
+                            <div th:each="transaksiSparepart : ${transaksiSparepartList}" 
+                                 th:if="${transaksiSparepart.transaksi.id == transaksi.id}">
+                                <span th:text="${transaksiSparepart.sparepart.nama}"></span> 
+                                (<span th:text="${transaksiSparepart.quantity}"></span>)
+                            </div>
+                        </td>
+                        <td th:text="${#numbers.formatDecimal(transaksi.biayaJasa, 0, 0)}" class="py-2 px-4 text-center biaya-jasa"></td>
+                        <td th:text="${#numbers.formatDecimal(biayaTotalMap[transaksi.id], 0, 0)}" class="py-2 px-4 text-center biaya-total"></td>
+                      
                           <td class="py-2 px-4 text-center">
                             <button class="btn btn-warning px-2 py-2 text-sm add-sparepart"
                             th:data-transaksi-id="${transaksi.id}"
@@ -217,6 +218,32 @@
             };
           });
         });
+
+        //format rupiah
+        function formatRupiah(angka) {
+          return angka.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+      
+        }
+
+        document.querySelectorAll('td[class*="py-2"]').forEach((cell) => {
+          const value = cell.textContent.trim();
+          if (!isNaN(value) && value !== "") {
+              cell.textContent = formatRupiah(value);
+          }
+      });
+
+      document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.biaya-jasa, .biaya-total').forEach((cell) => {
+        const value = cell.textContent.trim();
+        if (!isNaN(value) && value !== "") {
+            cell.textContent = formatRupiah(value);
+        }
+    });
+  });
+
+      
+
+      
       </script>
 
   <!--   Core JS Files   -->
