@@ -27,6 +27,6 @@ public class Sparepart {
     
     @Column(name = "stok")
     @NotNull(message = "Stok tidak boleh kosong.") 
-    @Min(value = 1, message = "Stok harus lebih besar dari 0.")
+    @Min(value = 0, message = "Stok harus minimal 0.")
     private int stok;
 }

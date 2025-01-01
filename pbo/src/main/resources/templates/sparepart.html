@@ -23,7 +23,9 @@
             <div class="card ">
               <div class="card-header">
                 <h4 class="card-title">Sparepart List</h4>
-                <button id="add-sparepart" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 mb-4 rounded">Add Sparepart</button>
+                <!-- disable add button -->
+                 <!-- <button id="add-sparepart" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 mb-4 rounded">Add Sparepart</button> -->
+
               </div>
 
               <div class="card-body">
@@ -36,18 +38,21 @@
                         <th class="py-2 px-4 border-b border-gray-700 text-center">Deskripsi</th>
                         <th class="py-2 px-4 border-b border-gray-700 text-center">Harga</th>
                         <th class="py-2 px-4 border-b border-gray-700 text-center">Stok</th>
-                        <th class="py-2 px-4 border-b border-gray-700 text-center">Aksi</th>
+                        <!-- Disable kolom aksi  -->
+                        <!-- <th class="py-2 px-4 border-b border-gray-700 text-center">Aksi</th>-->
                       </tr>
                     </thead>
                     <tbody>
-                        <tr th:each="sparepart : ${spareparts}">
+                      <tr th:each="sparepart : ${spareparts}">
                             <td th:text="${sparepart.id}" class="py-2 px-4 border-b border-gray-600 text-center"></td>
                             <td th:text="${sparepart.nama}" class="py-2 px-4 border-b border-gray-600 text-center"></td>
                             <td th:text="${sparepart.deskripsi}" class="py-2 px-4 border-b border-gray-600 text-center"></td>
-                            <td th:text="${sparepart.harga}" class="py-2 px-4 border-b border-gray-600 text-center"></td>
+                            <td th:text="${#numbers.formatDecimal(sparepart.harga, 0, 0)}" class="py-2 px-4 border-b border-gray-600 text-center harga"></td>
                             <td th:text="${sparepart.stok}" class="py-2 px-4 border-b border-gray-600 text-center"></td>
                             <td class="py-2 px-4 border-b border-gray-600 text-center">
-                            <button class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded mr-2 edit-sparepart"
+
+                            <!-- <th class="py-2 px-4 border-b border-gray-700 text-center">Aksi</th>
+                             <button class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded mr-2 edit-sparepart"
                                     th:attr="data-id=${sparepart.id}"
                                     th:data-nama="${sparepart.nama}"
                                     th:data-deskripsi="${sparepart.deskripsi}"
@@ -61,6 +66,7 @@
                                 </button>
                                 </form>
                             </td>
+                            -->
                         </tr>
                     </tbody>
                   </table>
@@ -82,7 +88,7 @@
     <!-- End Theme Setting -->
 
     <!-- Add Sparepart Form -->
-    <div id="add-sparepart-form" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+   <div id="add-sparepart-form" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
     <div class="bg-gray-800 p-6 rounded-lg shadow-lg w-1/3">
         <h3 class="text-xl font-semibold mb-4">Add Sparepart</h3>
         <form th:action="@{/sparepart}" method="post">
@@ -197,7 +203,7 @@
           const form = this; // Save the current form reference
            setTimeout(function() {
             form.submit(); // Use the saved form reference to submit
-            }, 2000);
+            }, );
         });
       
         // Show Edit Sparepart Form and Populate Data
@@ -236,7 +242,7 @@
         const form = this; // Save the current form reference
         setTimeout(function() {
             form.submit(); // Use the saved form reference to submit
-        }, 2000);
+        }, );
         });
 
       
@@ -254,7 +260,7 @@
                 // Tambahkan jeda waktu sebelum submit form
                 setTimeout(function() {
                     form.submit();
-                }, 2000);
+                }, );
 
             };
 
@@ -265,6 +271,26 @@
             };
           });
         });
+
+       // Format Rupiah
+      function formatRupiah(angka) {
+        // Pastikan angka dalam format integer
+        let number = parseFloat(angka.replace(/\D/g, ''));  // Hapus karakter selain angka
+        return number.toLocaleString('id-ID');  // Format angka menjadi format Rupiah
+      }
+
+    // Tunggu hingga DOM sepenuhnya dimuat
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('.harga').forEach((cell) => {
+      let value = cell.textContent.trim();  // Ambil teks dalam td
+
+      // Cek jika teks adalah angka yang valid
+      if (!isNaN(value) && value !== "") {
+          // Ubah teks di dalam td ke format Rupiah
+          cell.textContent = formatRupiah(value);
+      }
+  });
+});
       </script>
 
   <!--   Core JS Files   -->
