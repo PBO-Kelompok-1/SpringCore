@@ -62,49 +62,80 @@
     <p>&copy; 2024 Bengkel Jawa - Kelompok 1 PBO. All Rights Reserved.</p>
   </footer>
 
- <!-- Add Transaction Modal -->
-<div id="add-transaction-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
-  <div class="bg-gray-800 p-6 rounded-lg shadow-lg w-1/3">
-      <h3 class="text-xl font-semibold mb-4">Add Transaction</h3>
-      <form id="addTransactionForm1">
+  <!-- Add Transaction Modal -->
+  <div id="add-transaction-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+    <div class="bg-gray-800 p-6 rounded-lg shadow-lg w-1/3">
+        <h3 class="text-xl font-semibold mb-4">Add Transaction</h3>
+        <form id="addTransactionForm1">
+            
+          <input type="hidden" id="pelangganId">
+          <input type="hidden" id="mekanikId">
+          <input type="hidden" id="sparepartId">
           
-        <input type="hidden" id="pelangganId">
-        <input type="hidden" id="mekanikId">
-        <input type="hidden" id="sparepartId">
-        
-          <div class="mb-4">
-              <label for="searchPelanggan" class="block text-gray-200">Pelanggan</label>
-              <input type="text" id="searchPelanggan" class="w-full p-2 mt-2 bg-gray-700 text-white rounded" required>
-              <ul id="pelangganList" class="list-group mt-2"></ul>
-          </div>
-          <div class="mb-4">
-              <label for="searchMekanik" class="block text-gray-200">Mekanik</label>
-              <input type="text" id="searchMekanik" class="w-full p-2 mt-2 bg-gray-700 text-white rounded" required>
-              <ul id="mekanikList" class="list-group mt-2"></ul>
-          </div>
-          <div class="mb-4">
-              <label for="add-stnk" class="block text-gray-200">STNK</label>
-              <input type="text" id="add-stnk" class="w-full p-2 mt-2 bg-gray-700 text-white rounded" required>
-          </div>
-          <div class="mb-4">
-              <label for="add-motor" class="block text-gray-200">Motor</label>
-              <input type="text" id="add-motor" class="w-full p-2 mt-2 bg-gray-700 text-white rounded" required>
-          </div>
-          <div class="mb-4">
-              <label for="add-catatan" class="block text-gray-200">Catatan</label>
-              <textarea id="add-catatan" class="w-full p-2 mt-2 bg-gray-700 text-white rounded" required></textarea>
-          </div>
-          <div class="mb-4">
-              <label for="add-biayaJasa" class="block text-gray-200">Biaya Jasa</label>
-              <input type="number" id="add-biayaJasa" class="w-full p-2 mt-2 bg-gray-700 text-white rounded" required>
-          </div>
-            <div class="flex justify-between">
-              <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">Submit</button>
-              <button type="button" id="close-add-modal" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded">Cancel</button>
-          </div>
-      </form>
+            <div class="mb-4">
+                <label for="searchPelanggan" class="block text-gray-200">Pelanggan</label>
+                <input type="text" id="searchPelanggan" class="w-full p-2 mt-2 bg-gray-700 text-white rounded" required>
+                <ul id="pelangganList" class="list-group mt-2"></ul>
+            </div>
+            <div class="mb-4">
+                <label for="searchMekanik" class="block text-gray-200">Mekanik</label>
+                <input type="text" id="searchMekanik" class="w-full p-2 mt-2 bg-gray-700 text-white rounded" required>
+                <ul id="mekanikList" class="list-group mt-2"></ul>
+            </div>
+            <div class="mb-4">
+                <label for="add-stnk" class="block text-gray-200">STNK</label>
+                <input type="text" id="add-stnk" class="w-full p-2 mt-2 bg-gray-700 text-white rounded" required>
+            </div>
+            <div class="mb-4">
+                <label for="add-motor" class="block text-gray-200">Motor</label>
+                <input type="text" id="add-motor" class="w-full p-2 mt-2 bg-gray-700 text-white rounded" required>
+            </div>
+            <div class="mb-4">
+                <label for="add-catatan" class="block text-gray-200">Catatan</label>
+                <textarea id="add-catatan" class="w-full p-2 mt-2 bg-gray-700 text-white rounded" required></textarea>
+            </div>
+            <div class="mb-4">
+                <label for="add-biayaJasa" class="block text-gray-200">Biaya Jasa</label>
+                <input type="number" id="add-biayaJasa" class="w-full p-2 mt-2 bg-gray-700 text-white rounded" required>
+            </div>
+              <div class="flex justify-between">    
+                <button type="button" id="close-add-modal" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded">Cancel</button>
+                <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">Submit</button>
+            </div>
+        </form>
+    </div>
   </div>
-</div>
+
+  <!-- Edit Transaction Modal -->
+  <div id="edit-transaction-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center d-none">
+    <div class="bg-gray-800 p-6 rounded-lg shadow-lg w-1/3">
+      <h3 class="text-xl font-semibold mb-4">Edit Transaction</h3>
+      <form id="editTransactionForm">
+        <input type="hidden" id="edit-transaction-id">
+
+        <div class="mb-4">
+          <label for="edit-stnk" class="block text-gray-200">STNK</label>
+          <input type="text" id="edit-stnk" class="w-full p-2 mt-2 bg-gray-700 text-white rounded" required>
+        </div>
+        <div class="mb-4">
+          <label for="edit-motor" class="block text-gray-200">Motor</label>
+          <input type="text" id="edit-motor" class="w-full p-2 mt-2 bg-gray-700 text-white rounded" required>
+        </div>
+        <div class="mb-4">
+          <label for="edit-catatan" class="block text-gray-200">Catatan</label>
+          <textarea id="edit-catatan" class="w-full p-2 mt-2 bg-gray-700 text-white rounded" required></textarea>
+        </div>
+        <div class="mb-4">
+          <label for="edit-biayaJasa" class="block text-gray-200">Biaya Jasa</label>
+          <input type="number" id="edit-biayaJasa" class="w-full p-2 mt-2 bg-gray-700 text-white rounded" required>
+        </div>
+        <div class="flex justify-between">
+          <button type="button" id="close-edit-modal" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded">Cancel</button>
+          <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">Update</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
@@ -142,7 +173,7 @@
             <td class="py-2 px-4 border-b border-gray-600 text-center">${transaksi.totalHarga}</td>
             <td class="py-2 px-4 border-b border-gray-600 text-center">${transaksi.status}</td>
             <td class="py-2 px-4 border-b border-gray-600 text-center">
-              <button class="btn btn-warning btn-sm" onclick="edit(${transaksi.id})">Edit</button>
+              <button class="btn btn-warning btn-sm" onclick="edit(${transaksi.id}, ${transaksi.pelanggan.id}, ${transaksi.mekanik.id}, '${transaksi.stnk}', '${transaksi.motor}', '${transaksi.catatan}', ${transaksi.biayaJasa}, '${transaksi.status}')">Edit</button>
             </td>
           `;
           transaksiBody.appendChild(row);
@@ -188,10 +219,6 @@
 
     const searchMekanik = document.getElementById('searchMekanik');
     const mekanikList = document.getElementById('mekanikList');
-
-    const searchSparepart = document.getElementById('searchSparepart');
-    const sparepartList = document.getElementById('sparepartList');
-    const selectedSpareparts = document.getElementById('selectedSpareparts');
 
     async function fetchData(url) {
       try {
@@ -289,6 +316,71 @@
   }
 });
 
+  </script>
+
+  <script>
+    let pelangganIdGlobal = null;
+    let mekanikIdGlobal = null;
+    let statusGlobal = null;
+
+    const editTransactionModal = document.getElementById('edit-transaction-modal');
+    const closeEditModal = document.getElementById('close-edit-modal');
+
+    function edit(id, pelangganId, mekanikId, stnk, motor, catatan, biayaJasa, status) {
+      pelangganIdGlobal = pelangganId;
+      mekanikIdGlobal = mekanikId;
+      statusGlobal = status;
+      
+      document.getElementById('edit-transaction-id').value = id;
+      // document.getElementById('edit-pelangganId').value = pelanggan;
+      // document.getElementById('edit-mekanikId').value = mekanik;
+      document.getElementById('edit-stnk').value = stnk;
+      document.getElementById('edit-motor').value = motor;
+      document.getElementById('edit-catatan').value = catatan;
+      document.getElementById('edit-biayaJasa').value = biayaJasa;
+
+      editTransactionModal.classList.remove('d-none');
+    }
+
+    closeEditModal.addEventListener('click', () => {
+      editTransactionModal.classList.add('d-none');
+    });
+
+    document.getElementById('editTransactionForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const id = document.getElementById('edit-transaction-id').value;
+      const stnk = document.getElementById('edit-stnk').value;
+      const motor = document.getElementById('edit-motor').value;
+      const catatan = document.getElementById('edit-catatan').value;
+      const biayaJasa = document.getElementById('edit-biayaJasa').value;
+
+      const payload = {
+        id,
+        pelanggan: { id: pelangganIdGlobal  },
+        mekanik: { id: mekanikIdGlobal },
+        stnk,
+        motor,
+        catatan,
+        biayaJasa,
+        status: statusGlobal
+      };
+
+      console.log(payload);
+      const response = await fetch(`/transaksi/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (response.ok) {
+        editTransactionModal.classList.add('d-none');
+        window.location.reload();
+      } else {
+        alert('Gagal mengupdate transaksi.');
+      }
+    });
   </script>
   <!--   Core JS Files   -->
   <script src="/assets/js/core/jquery.min.js"></script>
