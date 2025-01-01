@@ -72,25 +72,6 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
     }
-
-    @ModelAttribute
-public void addUserToModel(Authentication authentication, Model model) {
-    if (authentication == null) {
-        System.out.println("Authentication is null");
-    } else if (!authentication.isAuthenticated()) {
-        System.out.println("User is not authenticated");
-    } else {
-        Object principal = authentication.getPrincipal();
-        if (principal instanceof User) {
-            User user = (User) principal;
-            System.out.println("Logged in username: " + user.getUsername());
-            model.addAttribute("username", user.getUsername());
-        } else {
-            System.out.println("Principal is not of type User: " + principal.getClass());
-        }
-    }
-}
-
     
 
 }
