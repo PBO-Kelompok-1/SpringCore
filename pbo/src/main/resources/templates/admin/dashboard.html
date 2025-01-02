@@ -6,95 +6,97 @@
 <!-- End Header -->
 
 <body>
-  <div class="wrapper">
-    <!-- Sidebar -->
-    <div th:insert="fragments/sidebar :: sidebar"></div>
-    <!-- End Sidebar -->
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <div th:insert="fragments/sidebar :: sidebar"></div>
+        <!-- End Sidebar -->
 
-    <div class="main-panel">
-      <!-- Navbar -->
-      <div th:insert="fragments/navbar :: navbar"></div>
-      <!-- End Navbar -->
+        <div class="main-panel">
+            <!-- Navbar -->
+            <div th:insert="fragments/navbar :: navbar"></div>
+            <!-- End Navbar -->
 
-      <!-- Content -->
-      <div class="content">
-        <div class="row">
-          <!-- Card Pendapatan Jasa -->
-          <div class="col-lg-4">
-            <div class="card card-chart" style="min-height: 220px;"> <!-- Set min-height untuk mengurangi tinggi card -->
-              <div class="card-header">
-                <h5 class="card-category">Pendapatan Jasa</h5>
-                <h3 class="card-title"><i class="tim-icons icon-bell-55 text-primary"></i>  
-                  <span th:text="${totalBiayaJasa}"></span>
-                </h3> 
-              </div>
-              <div class="card-body">
-                <div class="chart-area">
-                  <canvas id="chartLinePurple"></canvas>
+            <!-- Content -->
+            <div class="content">
+                <div class="row">
+                    <!-- Card Pendapatan Jasa -->
+                    <div class="col-lg-4">
+                        <div class="card card-chart" style="min-height: 220px;">
+                            <!-- Set min-height untuk mengurangi tinggi card -->
+                            <div class="card-header">
+                                <h5 class="card-category">Pendapatan Jasa</h5>
+                                <h3 class="card-title"><i class="tim-icons icon-bell-55 text-primary"></i>
+                                    <span th:text="'Rp'+ ${#numbers.formatDecimal(totalBiayaJasa, 0, 0)}"></span>
+                                </h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-area">
+                                    <canvas id="chartLinePurple"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card Penjualan Sparepart -->
+                    <div class="col-lg-4">
+                        <div class="card card-chart" style="min-height: 220px;">
+                            <div class="card-header">
+                                <h5 class="card-category">Penjualan SparePart</h5>
+                                <h3 class="card-title"><i class="tim-icons icon-delivery-fast text-info"></i>
+                                    <span th:text="'Rp'+ ${#numbers.formatDecimal(totalBiayaSparepart, 0, 0)}"></span>
+                                </h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-area">
+                                    <canvas id="CountryChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card Total Pendapatan -->
+                    <div class="col-lg-4">
+                        <div class="card card-chart" style="min-height: 220px;">
+                            <div class="card-header">
+                                <h5 class="card-category">Total Pendapatan</h5>
+                                <h3 class="card-title"><i class="tim-icons icon-send text-success"></i>
+                                    <span th:text="'Rp'+ ${#numbers.formatDecimal(totalPendapatan, 0, 0)}"></span>
+                                </h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-area">
+                                    <canvas id="chartLineGreen"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
             </div>
-          </div>
+            <!-- End Content -->
 
-          <!-- Card Penjualan Sparepart -->
-          <div class="col-lg-4">
-            <div class="card card-chart" style="min-height: 220px;">
-              <div class="card-header">
-                <h5 class="card-category">Penjualan SparePart</h5>
-                <h3 class="card-title"><i class="tim-icons icon-delivery-fast text-info"></i> 
-                  <span th:text="${totalBiayaSparepart}"></span>
-                </h3>
-              </div>
-              <div class="card-body">
-                <div class="chart-area">
-                  <canvas id="CountryChart"></canvas>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Card Total Pendapatan -->
-          <div class="col-lg-4">
-            <div class="card card-chart" style="min-height: 220px;">
-              <div class="card-header">
-                <h5 class="card-category">Total Pendapatan</h5>
-                <h3 class="card-title"><i class="tim-icons icon-send text-success"></i> 
-                  <span th:text="${totalPendapatan}"></span>
-                </h3>
-              </div>
-              <div class="card-body">
-                <div class="chart-area">
-                  <canvas id="chartLineGreen"></canvas>
-                </div>
-              </div>
-            </div>
-          </div>
+            <!-- Footer -->
+            <div th:insert="fragments/footer :: footer"></div>
+            <!-- End Footer -->
         </div>
-      </div>
-      <!-- End Content -->
-
-      <!-- Footer -->
-      <div th:insert="fragments/footer :: footer"></div>
-      <!-- End Footer -->
     </div>
-  </div>
-  <!-- Theme Setting -->
-  <div th:insert="fragments/theme :: theme"></div>
+    <!-- Theme Setting -->
+    <div th:insert="fragments/theme :: theme"></div>
     <!-- End Theme Setting -->
-  <!-- Core JS Files -->
-  <script src="/assets/js/core/jquery.min.js"></script>
-  <script src="/assets/js/core/popper.min.js"></script>
-  <script src="/assets/js/core/bootstrap.min.js"></script>
-  <script src="/assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
-  <!-- Chart JS -->
-  <script src="/assets/js/plugins/chartjs.min.js"></script>
-  <!-- Notifications Plugin -->
-  <script src="/assets/js/plugins/bootstrap-notify.js"></script>
-  <!-- Control Center for Black Dashboard -->
-  <script src="/assets/js/black-dashboard.min.js?v=1.0.0"></script>
-  <script src="/assets/demo/demo.js"></script>
-  <script src="/js/sidebar.js"></script>
-  <script src="/js/activeMenu.js"></script>
-  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
+    <!-- Core JS Files -->
+    <script src="/assets/js/core/jquery.min.js"></script>
+    <script src="/assets/js/core/popper.min.js"></script>
+    <script src="/assets/js/core/bootstrap.min.js"></script>
+    <script src="/assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+    <!-- Chart JS -->
+    <script src="/assets/js/plugins/chartjs.min.js"></script>
+    <!-- Notifications Plugin -->
+    <script src="/assets/js/plugins/bootstrap-notify.js"></script>
+    <!-- Control Center for Black Dashboard -->
+    <script src="/assets/js/black-dashboard.min.js?v=1.0.0"></script>
+    <script src="/assets/demo/demo.js"></script>
+    <script src="/js/sidebar.js"></script>
+    <script src="/js/activeMenu.js"></script>
+    <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
 </body>
+
 </html>
