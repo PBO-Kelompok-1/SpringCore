@@ -4,6 +4,7 @@ package com.tubes.pbo.models;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
+import java.util.Date;
 
 @Entity
 @Table(name = "transaksi")
@@ -39,4 +40,9 @@ public class Transaksi {
   @ManyToOne
   @JoinColumn(name = "id_mekanik", referencedColumnName = "id")
   private User mekanik;
+
+  @Column(name = "tanggal_transaksi")
+  @Temporal(TemporalType.DATE)
+  private Date tanggalTransaksi = new Date();
+  
 }

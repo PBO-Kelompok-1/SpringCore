@@ -23,6 +23,20 @@
                             <div class="card-header d-flex justify-content-between align-items-center">
                                 <h4 class="card-title">Transaction List</h4>
                                 <button id="add-sparepart" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addTransactionModal">Add Transaksi</button>
+                            </div>                            
+                            <div class="container">
+                                <h2>Cari Pelanggan Berdasarkan Tanggal Transaksi</h2>
+                                <form id="searchByDateForm">
+                                    <div class="form-group">
+                                        <label for="startDate">Tanggal Mulai:</label>
+                                        <input type="date" id="startDate" name="startDate" class="form-control" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="endDate">Tanggal Selesai:</label>
+                                        <input type="date" id="endDate" name="endDate" class="form-control" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Cari</button>
+                                </form>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
@@ -423,3 +437,54 @@
 </body>
 
 </html>
+
+
+<script>
+    document.getElementById('searchByDateForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
+
+        try {
+            const response = await fetch(`/transaksi/search-by-date?startDate=${startDate}&endDate=${endDate}`);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const transaksiList = await response.json();
+            console.log(transaksiList); // Add this line to check the structure of the data
+            const transaksiBody = document.getElementById('transaksi-body');
+            transaksiBody.innerHTML = '';
+
+            transaksiList.forEach(transaksi => {
+                const spareparts = transaksi.spareparts ? transaksi.spareparts.map(sparepart => `${sparepart.quantity}x ${sparepart.nama}`).join(', ') : '-';
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="py-2 px-4 border-b border-gray-600 text-center">${transaksi.id}</td>
+                    <td class="py-2 px-4 border-b border-gray-600 text-center">${transaksi.pelanggan.nama}</td>
+                    <td class="py-2 px-4 border-b border-gray-600 text-center">${transaksi.mekanik.username}</td>
+                    <td class="py-2 px-4 border-b border-gray-600 text-center">${transaksi.stnk}</td>
+                    <td class="py-2 px-4 border-b border-gray-600 text-center">${transaksi.motor}</td>
+                    <td class="py-2 px-4 border-b border-gray-600 text-center">${transaksi.catatan}</td>
+                    <td class="py-2 px-4 border-b border-gray-600 text-center">${spareparts}</td>
+                    <td class="py-2 px-4 border-b border-gray-600 text-center">${formatRupiah(transaksi.biayaJasa)}</td>
+                    <td class="py-2 px-4 border-b border-gray-600 text-center">${formatRupiah(transaksi.totalHarga)}</td>
+                    <td class="py-2 px-4 border-b border-gray-600 text-center">${transaksi.status}</td>
+                    <td class="py-2 px-4 border-b border-gray-600 text-center">
+                        <button class="btn btn-warning btn-sm" onclick="edit(${transaksi.id}, ${transaksi.pelanggan.id}, ${transaksi.mekanik.id}, '${transaksi.stnk}', '${transaksi.motor}', '${transaksi.catatan}', ${transaksi.biayaJasa}, '${transaksi.status}')">Edit</button>
+                    </td>
+                `;
+                transaksiBody.appendChild(row);
+            });
+        } catch (error) {
+            console.error('Error fetching transaksi:', error);
+        }
+    });
+
+    function formatRupiah(angka) {
+        const format = new Intl.NumberFormat('id-ID', {
+            style: 'currency',
+            currency: 'IDR',
+        });
+        return format.format(angka);
+    }
+</script>
