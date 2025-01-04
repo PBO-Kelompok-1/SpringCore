@@ -9,6 +9,7 @@ import com.tubes.pbo.repositories.PelangganRepository;
 import com.tubes.pbo.repositories.CheckoutSparepartRepository;
 import com.tubes.pbo.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 // import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.Map;
+import java.util.Date;
 
 
 @RestController
@@ -229,5 +231,29 @@ public class TransaksiController {
     public void setSpareparts(List<CheckoutSparepart> spareparts) {
         this.spareparts = spareparts;
     }
+  }
+
+
+  @GetMapping("/search-by-date")
+  public ResponseEntity<List<Map<String, Object>>> getTransaksiByDateRange(
+          @RequestParam("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
+          @RequestParam("endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate) {
+      List<Transaksi> transaksiList = transaksiRepository.findByTanggalTransaksiBetween(startDate, endDate);
+      List<Map<String, Object>> responseList = transaksiList.stream().map(transaksi -> {
+          Map<String, Object> response = new HashMap<>();
+          response.put("id", transaksi.getId());
+          response.put("pelanggan", transaksi.getPelanggan());
+          response.put("mekanik", transaksi.getMekanik());
+          response.put("stnk", transaksi.getStnk());
+          response.put("motor", transaksi.getMotor());
+          response.put("catatan", transaksi.getCatatan());
+          response.put("biayaJasa", transaksi.getBiayaJasa());
+          List<CheckoutSparepart> checkoutSpareparts = checkoutSparepartRepository.findByTransaksiId(transaksi.getId());
+          response.put("totalHarga", transaksi.getBiayaJasa() + checkoutSpareparts.stream()
+                  .mapToDouble(cs -> cs.getQuantity() * cs.getSparepart().getHarga()).sum());
+          response.put("status", transaksi.getStatus());
+          return response;
+      }).collect(Collectors.toList());
+      return ResponseEntity.ok(responseList);
   }
 }
