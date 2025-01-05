@@ -1,6 +1,7 @@
 package com.tubes.pbo.services;
 
 import com.tubes.pbo.models.CheckoutSparepart;
+import com.tubes.pbo.models.Pelanggan;
 import com.tubes.pbo.repositories.CheckoutSparepartRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,5 +47,13 @@ public class CheckoutSparepartService {
 
     public List<CheckoutSparepart> getCheckoutSparepartsByTransaksiId(int transaksiId) {
         return checkoutSparepartRepository.findByTransaksiId(transaksiId);
+    }
+
+    public List<CheckoutSparepart> getCheckoutSparepartsBySparepartId(int sparepartId) {
+        return checkoutSparepartRepository.findBySparepartId(sparepartId);
+    }
+
+    public List<Pelanggan> findPelangganBySparepartNama(String namaSparepart) {
+        return checkoutSparepartRepository.findPelangganBySparepartNama(namaSparepart);
     }
 }
