@@ -22,6 +22,51 @@
           <div class="col-lg-12 col-md-12">
             <div class="card ">
               <div class="card-header">
+                <!-- Form Pencarian Pelanggan Berdasarkan Nama Sparepart -->
+                <form id="searchBySparepartForm">
+                  <div class="form-group">
+                      <label for="sparepartName">Nama Sparepart:</label>
+                      <input type="text" id="sparepartName" name="sparepartName" class="form-control" required>
+                  </div>
+                  <button type="submit" class="btn btn-primary">Cari</button>
+                </form>
+
+                <!-- Tabel Hasil Pencarian -->
+                <table class="table tablesorter" id="resultTable">
+                  <thead class="text-primary">
+                      <tr>
+                          <th class="py-2 px-4 border-b border-gray-700 text-center">ID</th>
+                          <th class="py-2 px-4 border-b border-gray-700 text-center">Nama</th>
+                          <th class="py-2 px-4 border-b border-gray-700 text-center">No HP</th>
+                          <th class="py-2 px-4 border-b border-gray-700 text-center">Alamat</th>
+                      </tr>
+                  </thead>
+                  <tbody id="resultBody">
+                      <!-- Hasil pencarian akan ditampilkan di sini -->
+                  </tbody>
+                </table>
+
+                <script>
+                document.getElementById('searchBySparepartForm').addEventListener('submit', async (e) => {
+                  e.preventDefault();
+                  const sparepartName = document.getElementById('sparepartName').value;
+                  const response = await fetch(`/checkout-spareparts/pelanggan-by-sparepart?namaSparepart=${sparepartName}`);
+                  const pelangganList = await response.json();
+
+                  const resultBody = document.getElementById('resultBody');
+                  resultBody.innerHTML = '';
+                  pelangganList.forEach(pelanggan => {
+                      const row = document.createElement('tr');
+                      row.innerHTML = `
+                          <td class="py-2 px-4 border-b border-gray-600 text-center">${pelanggan.id}</td>
+                          <td class="py-2 px-4 border-b border-gray-600 text-center">${pelanggan.nama}</td>
+                          <td class="py-2 px-4 border-b border-gray-600 text-center">${pelanggan.noHp}</td>
+                          <td class="py-2 px-4 border-b border-gray-600 text-center">${pelanggan.alamat}</td>
+                      `;
+                      resultBody.appendChild(row);
+                  });
+                });
+                </script>
                 <h4 class="card-title">Customer List</h4>
                 <button id="add-user-button" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">
                   Add

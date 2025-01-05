@@ -1,6 +1,7 @@
 package com.tubes.pbo.controllers;
 
 import com.tubes.pbo.models.CheckoutSparepart;
+import com.tubes.pbo.models.Pelanggan;
 import com.tubes.pbo.models.Sparepart;
 import com.tubes.pbo.models.Transaksi;
 import com.tubes.pbo.services.CheckoutSparepartService;
@@ -86,6 +87,22 @@ public class CheckoutSparepartController {
             CheckoutSparepart savedCheckoutSparepart = checkoutSparepartService.saveCheckoutSparepart(checkoutSparepart);
             return ResponseEntity.ok(savedCheckoutSparepart);
         }
+    }
+
+    @GetMapping("/by-sparepart/{sparepartId}")
+    public ResponseEntity<List<CheckoutSparepart>> getCheckoutSparepartsBySparepartId(@PathVariable int sparepartId) {
+        List<CheckoutSparepart> list = checkoutSparepartService.getCheckoutSparepartsBySparepartId(sparepartId);
+        if (!list.isEmpty()) {
+            return ResponseEntity.ok(list);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/pelanggan-by-sparepart")
+    public ResponseEntity<List<Pelanggan>> getPelangganBySparepartNama(@RequestParam String namaSparepart) {
+        List<Pelanggan> pelangganList = checkoutSparepartService.findPelangganBySparepartNama(namaSparepart);
+        return ResponseEntity.ok(pelangganList);
     }
         
     //  Get all CheckoutSpareparts
