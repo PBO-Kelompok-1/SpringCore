@@ -140,7 +140,7 @@
             </div>
         </div>
     </div>
-    <>
+    <script>
         // Function to show notification
         function showNotification(message) {
             const notificationModal = document.getElementById("notification-modal");
@@ -213,11 +213,11 @@
             });
         });
 
-        //format rupiah
-        function formatRupiah(angka) {
-            return angka.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        // //format rupiah
+        // function formatRupiah(angka) {
+        //     return angka.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 
-        }
+        // }
 
         document.querySelectorAll('td[class*="py-2"]').forEach((cell) => {
             const value = cell.textContent.trim();
@@ -234,7 +234,7 @@
                 }
             });
         });
-    </>
+    </script>
 
     <!--   Core JS Files   -->
     <script src="/assets/js/core/jquery.min.js"></script>
