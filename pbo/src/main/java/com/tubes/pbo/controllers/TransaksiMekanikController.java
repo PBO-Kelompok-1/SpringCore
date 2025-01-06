@@ -144,7 +144,7 @@ public class TransaksiMekanikController {
         return "redirect:/dashboard-mekanik";
              } catch (Exception e) {
                 model.addAttribute("errorMessage", e.getMessage());
-                return "redirect:/dashboard-mekanikss";
+                return "redirect:/dashboard-mekanik";
              }
         
     }
