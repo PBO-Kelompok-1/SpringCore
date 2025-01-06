@@ -59,7 +59,7 @@ public class SecurityConfig {
                     .and() 
                     .sessionFixation().migrateSession() //
                     .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED) 
-                    .invalidSessionUrl("/login?expired=true") // masih timeout default 1800 detik gatau set dimana 
+                    .invalidSessionUrl("/login?expired=true") 
             )
                 .exceptionHandling(exceptionHandling -> 
                    exceptionHandling
