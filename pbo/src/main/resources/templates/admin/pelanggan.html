@@ -1,4 +1,4 @@
-<!DOCTYPE >
+<!DOCTYPE html>
 <html lang="en" html xmlns:th="http://www.thymeleaf.org">
 
 <!-- Header -->
@@ -30,43 +30,6 @@
                   </div>
                   <button type="submit" class="btn btn-primary">Cari</button>
                 </form>
-
-                <!-- Tabel Hasil Pencarian -->
-                <table class="table tablesorter" id="resultTable">
-                  <thead class="text-primary">
-                      <tr>
-                          <th class="py-2 px-4 border-b border-gray-700 text-center">ID</th>
-                          <th class="py-2 px-4 border-b border-gray-700 text-center">Nama</th>
-                          <th class="py-2 px-4 border-b border-gray-700 text-center">No HP</th>
-                          <th class="py-2 px-4 border-b border-gray-700 text-center">Alamat</th>
-                      </tr>
-                  </thead>
-                  <tbody id="resultBody">
-                      <!-- Hasil pencarian akan ditampilkan di sini -->
-                  </tbody>
-                </table>
-
-                <script>
-                document.getElementById('searchBySparepartForm').addEventListener('submit', async (e) => {
-                  e.preventDefault();
-                  const sparepartName = document.getElementById('sparepartName').value;
-                  const response = await fetch(`/checkout-spareparts/pelanggan-by-sparepart?namaSparepart=${sparepartName}`);
-                  const pelangganList = await response.json();
-
-                  const resultBody = document.getElementById('resultBody');
-                  resultBody.innerHTML = '';
-                  pelangganList.forEach(pelanggan => {
-                      const row = document.createElement('tr');
-                      row.innerHTML = `
-                          <td class="py-2 px-4 border-b border-gray-600 text-center">${pelanggan.id}</td>
-                          <td class="py-2 px-4 border-b border-gray-600 text-center">${pelanggan.nama}</td>
-                          <td class="py-2 px-4 border-b border-gray-600 text-center">${pelanggan.noHp}</td>
-                          <td class="py-2 px-4 border-b border-gray-600 text-center">${pelanggan.alamat}</td>
-                      `;
-                      resultBody.appendChild(row);
-                  });
-                });
-                </script>
                 <h4 class="card-title">Customer List</h4>
                 <button id="add-user-button" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">
                   Add
@@ -75,8 +38,8 @@
 
               <div class="card-body">
                 <div class="table-responsive">
-                  <table class="table tablesorter " id="">
-                    <thead class=" text-primary">
+                  <table class="table tablesorter" id="customerTable">
+                    <thead class="text-primary">
                       <tr>
                         <th class="p-2 border-r border-gray-800 text-center">ID</th>
                         <th class="p-2 border-r border-gray-800 text-center">Nama</th>
@@ -160,6 +123,7 @@
   <script>
     const API_GET_ALL_USERS = '/pelanggan';
     const API_UPDATE_USER = '/pelanggan/';
+    const API_SEARCH_BY_SPAREPART = '/checkout-spareparts/pelanggan-by-sparepart?namaSparepart=';
 
     const editPelangganForm = document.getElementById('edit-pelanggan-form');
     const pelangganIdField = document.getElementById('pelanggan-id');
@@ -237,6 +201,37 @@
 
     // Initial Load
     loadPelangganData();
+
+    // Search Pelanggan by Sparepart
+    document.getElementById('searchBySparepartForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const sparepartName = document.getElementById('sparepartName').value;
+    try {
+      const response = await fetch(API_SEARCH_BY_SPAREPART + sparepartName);
+      if (!response.ok) throw new Error('Failed to fetch data');
+
+      const pelangganList = await response.json();
+      const tableBody = document.getElementById('pelanggan-table-body');
+      tableBody.innerHTML = '';
+
+      pelangganList.forEach(pelanggan => {
+        const row = document.createElement('tr');
+        row.classList.add('border-b', 'border-gray-800');
+        row.innerHTML = `
+          <td class="py-2 px-4 border-b border-gray-600 text-center">${pelanggan.id}</td>
+          <td class="py-2 px-4 border-b border-gray-600 text-center">${pelanggan.nama}</td>
+          <td class="py-2 px-4 border-b border-gray-600 text-center">${pelanggan.no_hp}</td>
+          <td class="py-2 px-4 border-b border-gray-600 text-center">${pelanggan.alamat}</td>
+          <td class="py-2 px-4 border-b border-gray-600 text-center">
+            <button onclick="editPelanggan(${pelanggan.id}, '${pelanggan.nama}', '${pelanggan.no_hp}', '${pelanggan.alamat}')" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">Edit</button>
+          </td>
+        `;
+        tableBody.appendChild(row);
+      });
+    } catch (error) {
+      console.error('Error searching pelanggan:', error);
+    }
+  });
   </script>
 
   <script>
