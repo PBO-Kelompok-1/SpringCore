@@ -84,15 +84,15 @@
                                                 <td class="py-2 px-4 border-b border-gray-600 text-center">${transaksi.id}</td>
                                                 <td class="py-2 px-4 border-b border-gray-600 text-center">${transaksi.pelanggan.nama}</td>
                                                 <td class="py-2 px-4 border-b border-gray-600 text-center">${transaksi.mekanik.username}</td>
-                                                <td class="py-2 px-4 border-b border-gray-600 text-center">${transaksi.stnk}</td>
                                                 <td class="py-2 px-4 border-b border-gray-600 text-center">${transaksi.motor}</td>
                                                 <td class="py-2 px-4 border-b border-gray-600 text-center">${transaksi.catatan}</td>
                                                 <td class="py-2 px-4 border-b border-gray-600 text-center">${spareparts}</td>
                                                 <td class="py-2 px-4 border-b border-gray-600 text-center">${formatRupiah(transaksi.biayaJasa)}</td>
                                                 <td class="py-2 px-4 border-b border-gray-600 text-center">${formatRupiah(transaksi.totalHarga)}</td>
                                                 <td class="py-2 px-4 border-b border-gray-600 text-center">${transaksi.status}</td>
+                                                <td class="py-2 px-4 border-b border-gray-600 text-center">${transaksi.tanggalTransaksi}</td>
                                                 <td class="py-2 px-4 border-b border-gray-600 text-center">
-                                                    <button class="btn btn-warning btn-sm" onclick="edit(${transaksi.id}, ${transaksi.pelanggan.id}, ${transaksi.mekanik.id}, '${transaksi.stnk}', '${transaksi.motor}', '${transaksi.catatan}', ${transaksi.biayaJasa}, '${transaksi.status}')">Edit</button>
+                                                    <button class="btn btn-warning btn-sm" onclick="edit(${transaksi.id}, ${transaksi.pelanggan.id}, ${transaksi.mekanik.id}, '${transaksi.motor}', '${transaksi.catatan}', ${transaksi.biayaJasa}, '${transaksi.status}')">Edit</button>
                                                 </td>
                                             `;
                                             transaksiBody.appendChild(row);
@@ -106,18 +106,18 @@
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table class="table tablesorter">
-                                        <thead class="text-primary">
+                                        <thead class="text-primary text-center">
                                             <tr>
                                                 <th>ID</th>
                                                 <th>Pelanggan</th>
                                                 <th>Mekanik</th>
-                                                <th>STNK</th>
                                                 <th>Motor</th>
                                                 <th>Catatan</th>
                                                 <th>Sparepart</th>
                                                 <th>Biaya Jasa</th>
                                                 <th>Total Harga</th>
                                                 <th>Status</th>
+                                                <th>Tanggal</th>
                                                 <th>Aksi</th>
                                             </tr>
                                         </thead>
@@ -160,10 +160,6 @@
                     <ul id="mekanikList" class="list-group mt-2"></ul>
                 </div>
                 <div class="mb-4">
-                    <label for="add-stnk" class="block text-gray-200">STNK</label>
-                    <input type="text" id="add-stnk" class="w-full p-2 mt-2 bg-gray-700 text-white rounded" required>
-                </div>
-                <div class="mb-4">
                     <label for="add-motor" class="block text-gray-200">Motor</label>
                     <input type="text" id="add-motor" class="w-full p-2 mt-2 bg-gray-700 text-white rounded" required>
                 </div>
@@ -190,10 +186,6 @@
             <form id="editTransactionForm">
                 <input type="hidden" id="edit-transaction-id">
 
-                <div class="mb-4">
-                    <label for="edit-stnk" class="block text-gray-200">STNK</label>
-                    <input type="text" id="edit-stnk" class="w-full p-2 mt-2 bg-gray-700 text-white rounded" required>
-                </div>
                 <div class="mb-4">
                     <label for="edit-motor" class="block text-gray-200">Motor</label>
                     <input type="text" id="edit-motor" class="w-full p-2 mt-2 bg-gray-700 text-white rounded" required>
@@ -275,15 +267,15 @@
                     <td class="py-2 px-4 border-b border-gray-600 text-center">${transaksi.id}</td>
                     <td class="py-2 px-4 border-b border-gray-600 text-center">${transaksi.pelanggan ? transaksi.pelanggan.nama : '-'}</td>
                     <td class="py-2 px-4 border-b border-gray-600 text-center">${transaksi.mekanik ? transaksi.mekanik.username : '-'}</td>
-                    <td class="py-2 px-4 border-b border-gray-600 text-center">${transaksi.stnk}</td>
                     <td class="py-2 px-4 border-b border-gray-600 text-center">${transaksi.motor}</td>
                     <td class="py-2 px-4 border-b border-gray-600 text-center">${transaksi.catatan}</td>
                     <td class="py-2 px-4 border-b border-gray-600 text-center">${spareparts && spareparts.length > 0 ? spareparts : '-'}</td>
                     <td class="py-2 px-4 border-b border-gray-600 text-center">${formatRupiah(transaksi.biayaJasa)}</td>
                     <td class="py-2 px-4 border-b border-gray-600 text-center">${formatRupiah(transaksi.totalHarga)}</td>
                     <td class="py-2 px-4 border-b border-gray-600 text-center">${transaksi.status}</td>
+                    <td class="py-2 px-4 border-b border-gray-600 text-center">${transaksi.tanggalTransaksi}</td>
                     <td class="py-2 px-4 border-b border-gray-600 text-center">
-                        <button class="btn btn-warning btn-sm" onclick="edit(${transaksi.id}, ${transaksi.pelanggan.id}, ${transaksi.mekanik.id}, '${transaksi.stnk}', '${transaksi.motor}', '${transaksi.catatan}', ${transaksi.biayaJasa}, '${transaksi.status}')">Edit</button>
+                        <button class="btn btn-warning btn-sm" onclick="edit(${transaksi.id}, ${transaksi.pelanggan.id}, ${transaksi.mekanik.id}, '${transaksi.motor}', '${transaksi.catatan}', ${transaksi.biayaJasa}, '${transaksi.status}')">Edit</button>
                     </td>
                 `;
 
@@ -411,7 +403,6 @@
 
             // Pastikan field lain juga valid sebelum membuat payload
             const catatan = document.getElementById('add-catatan').value;
-            const stnk = document.getElementById('add-stnk').value;
             const motor = document.getElementById('add-motor').value;
             const biayaJasa = document.getElementById('add-biayaJasa').value;
 
@@ -424,7 +415,6 @@
                 },
                 sparepart: spareparts,
                 catatan,
-                stnk,
                 motor,
                 biayaJasa,
                 status: 'on going',
@@ -454,15 +444,12 @@
         const editTransactionModal = document.getElementById('edit-transaction-modal');
         const closeEditModal = document.getElementById('close-edit-modal');
 
-        function edit(id, pelangganId, mekanikId, stnk, motor, catatan, biayaJasa, status) {
+        function edit(id, pelangganId, mekanikId, motor, catatan, biayaJasa, status) {
             pelangganIdGlobal = pelangganId;
             mekanikIdGlobal = mekanikId;
             statusGlobal = status;
 
             document.getElementById('edit-transaction-id').value = id;
-            // document.getElementById('edit-pelangganId').value = pelanggan;
-            // document.getElementById('edit-mekanikId').value = mekanik;
-            document.getElementById('edit-stnk').value = stnk;
             document.getElementById('edit-motor').value = motor;
             document.getElementById('edit-catatan').value = catatan;
             document.getElementById('edit-biayaJasa').value = biayaJasa;
@@ -477,7 +464,6 @@
         document.getElementById('editTransactionForm').addEventListener('submit', async(e) => {
             e.preventDefault();
             const id = document.getElementById('edit-transaction-id').value;
-            const stnk = document.getElementById('edit-stnk').value;
             const motor = document.getElementById('edit-motor').value;
             const catatan = document.getElementById('edit-catatan').value;
             const biayaJasa = document.getElementById('edit-biayaJasa').value;
@@ -490,7 +476,6 @@
                 mekanik: {
                     id: mekanikIdGlobal
                 },
-                stnk,
                 motor,
                 catatan,
                 biayaJasa,
@@ -558,15 +543,15 @@
                     <td class="py-2 px-4 border-b border-gray-600 text-center">${transaksi.id}</td>
                     <td class="py-2 px-4 border-b border-gray-600 text-center">${transaksi.pelanggan.nama}</td>
                     <td class="py-2 px-4 border-b border-gray-600 text-center">${transaksi.mekanik.username}</td>
-                    <td class="py-2 px-4 border-b border-gray-600 text-center">${transaksi.stnk}</td>
                     <td class="py-2 px-4 border-b border-gray-600 text-center">${transaksi.motor}</td>
                     <td class="py-2 px-4 border-b border-gray-600 text-center">${transaksi.catatan}</td>
                     <td class="py-2 px-4 border-b border-gray-600 text-center">${spareparts}</td>
                     <td class="py-2 px-4 border-b border-gray-600 text-center">${formatRupiah(transaksi.biayaJasa)}</td>
                     <td class="py-2 px-4 border-b border-gray-600 text-center">${formatRupiah(transaksi.totalHarga)}</td>
                     <td class="py-2 px-4 border-b border-gray-600 text-center">${transaksi.status}</td>
+                    <td class="py-2 px-4 border-b border-gray-600 text-center">${transaksi.tanggalTransaksi}</td>
                     <td class="py-2 px-4 border-b border-gray-600 text-center">
-                        <button class="btn btn-warning btn-sm" onclick="edit(${transaksi.id}, ${transaksi.pelanggan.id}, ${transaksi.mekanik.id}, '${transaksi.stnk}', '${transaksi.motor}', '${transaksi.catatan}', ${transaksi.biayaJasa}, '${transaksi.status}')">Edit</button>
+                        <button class="btn btn-warning btn-sm" onclick="edit(${transaksi.id}, ${transaksi.pelanggan.id}, ${transaksi.mekanik.id}, '${transaksi.motor}', '${transaksi.catatan}', ${transaksi.biayaJasa}, '${transaksi.status}')">Edit</button>
                     </td>
                 `;
                 transaksiBody.appendChild(row);

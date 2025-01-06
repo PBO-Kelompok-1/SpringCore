@@ -20,10 +20,6 @@ public class Transaksi {
   private String catatan;
   
   @NotBlank
-  @Column(name = "stnk")
-  private String stnk;
-  
-  @NotBlank
   @Column(name = "motor")
   private String motor;
   

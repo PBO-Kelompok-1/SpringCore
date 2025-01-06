@@ -21,52 +21,43 @@
                 <div class="row">
                     <!-- Card Pendapatan Jasa -->
                     <div class="col-lg-4">
-                        <div class="card card-chart" style="min-height: 220px;">
-                            <!-- Set min-height untuk mengurangi tinggi card -->
+                        <div class="card card-chart d-flex flex-column justify-content-center align-items-center text-center" style="min-height: 220px; padding: 20px;">
+                            <!-- Set min-height dan padding untuk ruang lebih baik -->
                             <div class="card-header">
-                                <h5 class="card-category">Pendapatan Jasa</h5>
-                                <h3 class="card-title"><i class="tim-icons icon-bell-55 text-primary"></i>
-                                    <span th:text="'Rp'+ ${#numbers.formatDecimal(totalBiayaJasa, 0, 0)}"></span>
+                                <h5 class="card-title text-uppercase font-weight-bold" style="font-size: 2rem; margin-bottom: 10px;">Pendapatan Jasa</h5>
+                                <h3 class="card-title" style="font-size: 2rem; font-weight: bold;">
+                                    <i class="tim-icons icon-single-02 text-primary" style="font-size: 1.5rem;"></i>
+                                    <span th:text="${#numbers.formatDecimal(totalBiayaJasa, 0, 0)}" class="pendapatan-jasa"></span>
                                 </h3>
-                            </div>
-                            <div class="card-body">
-                                <div class="chart-area">
-                                    <canvas id="chartLinePurple"></canvas>
-                                </div>
                             </div>
                         </div>
                     </div>
+                    
 
                     <!-- Card Penjualan Sparepart -->
                     <div class="col-lg-4">
-                        <div class="card card-chart" style="min-height: 220px;">
+                        <div class="card card-chart d-flex flex-column justify-content-center align-items-center text-center" style="min-height: 220px; padding: 20px;">
+                            <!-- Set min-height dan padding untuk ruang lebih baik -->
                             <div class="card-header">
-                                <h5 class="card-category">Penjualan SparePart</h5>
-                                <h3 class="card-title"><i class="tim-icons icon-delivery-fast text-info"></i>
-                                    <span th:text="'Rp'+ ${#numbers.formatDecimal(totalBiayaSparepart, 0, 0)}"></span>
+                                <h5 class="card-title text-uppercase font-weight-bold" style="font-size: 2rem; margin-bottom: 10px;">Pendapatan Sparepart</h5>
+                                <h3 class="card-title" style="font-size: 2rem; font-weight: bold;">
+                                    <i class="tim-icons icon-settings text-warning" style="font-size: 1.5rem;"></i>
+                                    <span th:text="${#numbers.formatDecimal(totalBiayaSparepart, 0, 0)}" class="pendapatan-sparepart"></span>
                                 </h3>
-                            </div>
-                            <div class="card-body">
-                                <div class="chart-area">
-                                    <canvas id="CountryChart"></canvas>
-                                </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Card Total Pendapatan -->
                     <div class="col-lg-4">
-                        <div class="card card-chart" style="min-height: 220px;">
+                        <div class="card card-chart d-flex flex-column justify-content-center align-items-center text-center" style="min-height: 220px; padding: 20px;">
+                            <!-- Set min-height dan padding untuk ruang lebih baik -->
                             <div class="card-header">
-                                <h5 class="card-category">Total Pendapatan</h5>
-                                <h3 class="card-title"><i class="tim-icons icon-send text-success"></i>
-                                    <span th:text="'Rp'+ ${#numbers.formatDecimal(totalPendapatan, 0, 0)}"></span>
+                                <h5 class="card-title text-uppercase font-weight-bold" style="font-size: 2rem; margin-bottom: 10px;">Pendapatan Total</h5>
+                                <h3 class="card-title" style="font-size: 2rem; font-weight: bold;">
+                                    <i class="tim-icons icon-paper text-danger" style="font-size: 1.5rem;"></i>
+                                    <span th:text="${#numbers.formatDecimal(totalPendapatan, 0, 0)}" class="pendapatan-total"></span>
                                 </h3>
-                            </div>
-                            <div class="card-body">
-                                <div class="chart-area">
-                                    <canvas id="chartLineGreen"></canvas>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -82,6 +73,27 @@
     <!-- Theme Setting -->
     <div th:insert="fragments/theme :: theme"></div>
     <!-- End Theme Setting -->
+
+    <!-- Format Rupiah -->
+     <script>
+         // Fungsi untuk memformat angka ke format Rupiah
+         function formatRupiah(angka) {
+            const number = parseFloat(angka.replace(/[^\d]/g, "")); // Hapus karakter selain angka
+            if (isNaN(number)) return angka; // Jika bukan angka, kembalikan nilai asli
+            return "Rp " + number.toLocaleString("id-ID", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        // Format nilai biayaJasa dan biayaTotal pada saat halaman dimuat
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelectorAll(".pendapatan-jasa, .pendapatan-sparepart, .pendapatan-total").forEach(cell => {
+                const value = cell.textContent.trim();
+                if (value) {
+                    cell.textContent = formatRupiah(value);
+                }
+            });
+        });
+     </script>
+
     <!-- Core JS Files -->
     <script src="/assets/js/core/jquery.min.js"></script>
     <script src="/assets/js/core/popper.min.js"></script>

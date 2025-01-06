@@ -31,7 +31,6 @@ public class TransaksiSeeder implements CommandLineRunner {
         if (transaksiRepository.findById(1L).isEmpty()) {
             Transaksi transaksi1 = new Transaksi();
             transaksi1.setCatatan("Servis rutin");
-            transaksi1.setStnk("1234567890");
             transaksi1.setMotor("Honda Beat");
             transaksi1.setBiayaJasa(150000);
             transaksi1.setStatus("on going");
@@ -56,7 +55,6 @@ public class TransaksiSeeder implements CommandLineRunner {
         if (transaksiRepository.findById(2L).isEmpty()) {
             Transaksi transaksi2 = new Transaksi();
             transaksi2.setCatatan("Ganti oli");
-            transaksi2.setStnk("0987654321");
             transaksi2.setMotor("Yamaha NMAX");
             transaksi2.setBiayaJasa(100000);
             transaksi2.setStatus("on going");
@@ -77,7 +75,6 @@ public class TransaksiSeeder implements CommandLineRunner {
         if (transaksiRepository.findById(3L).isEmpty()) {
             Transaksi transaksi3 = new Transaksi();
             transaksi3.setCatatan("Ganti kampas rem");
-            transaksi3.setStnk("1122334455");
             transaksi3.setMotor("Suzuki Satria");
             transaksi3.setBiayaJasa(75000);
             transaksi3.setStatus("on going");

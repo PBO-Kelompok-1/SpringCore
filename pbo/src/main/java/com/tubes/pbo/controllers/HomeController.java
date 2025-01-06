@@ -68,24 +68,10 @@ public class HomeController {
         return "admin/dashboard";
     }
     
-  
-
-
     @GetMapping("/transaksi")
     public String transaksi() {
         return "transaksi";
     }
-
-    @GetMapping("/transaksi/form")
-    public String transaksiForm() {
-        return "transaksiForm";
-    }
-
-
-    // @GetMapping("/dashboardmekanik")
-    // public String  dashboardmekanik() {
-    //     return "dashboardmekanik";
-    // }
    
     @GetMapping("/admin/users")
     public String adminUsersPage() {
@@ -107,12 +93,6 @@ public class HomeController {
         return "admin/sparepart-admin"; 
     }
 
-    @GetMapping("/transaksi-mekanik")
-    public String transaksiMekanik() {
-        return "transaksi-mekanik"; 
-    }
-
-
     @Controller
     public class ErrorController {
     
@@ -121,7 +101,4 @@ public class HomeController {
             return "error/access-denied"; // Path sesuai dengan lokasi file HTML
         }
     }
-
-
-
 }

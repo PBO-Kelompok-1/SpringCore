@@ -33,11 +33,11 @@
                                                 <th class="py-2 px-4 border-b border-gray-700 text-center">ID</th>
                                                 <th class="py-2 px-4 border-b border-gray-700 text-center">Pelanggan</th>
                                                 <th class="py-2 px-4 border-b border-gray-700 text-center">Catatan</th>
-                                                <th class="py-2 px-4 border-b border-gray-700 text-center">STNK</th>
                                                 <th class="py-2 px-4 border-b border-gray-700 text-center">Motor</th>
                                                 <th class="py-2 px-4 border-b border-gray-700 text-center">Sparepart</th>
                                                 <th class="py-2 px-4 border-b border-gray-700 text-center">Biaya Jasa</th>
                                                 <th class="py-2 px-4 border-b border-gray-700 text-center">Biaya Total</th>
+                                                <th class="py-2 px-4 border-b border-gray-700 text-center">Tanggal</th>
                                                 <th class="py-2 px-4 border-b border-gray-700 text-center">Aksi</th>
                                             </tr>
                                         </thead>
@@ -47,7 +47,6 @@
                                                 <td th:text="${transaksi.id}" class="py-2 px-4 text-center"></td>
                                                 <td th:text="${transaksi.pelanggan.nama}" class="py-2 px-4 text-center"></td>
                                                 <td th:text="${transaksi.catatan}" class="py-2 px-4 text-center"></td>
-                                                <td th:text="${#strings.replace(transaksi.stnk, '.', '')}" class="py-2 px-4 text-center"></td>
                                                 <td th:text="${transaksi.motor}" class="py-2 px-4 text-center"></td>
                                                 <td class="py-2 px-4 text-center">
                                                     <!-- Loop untuk menampilkan sparepart yang terkait dengan transaksi -->
@@ -55,9 +54,9 @@
                                                         <span th:text="${transaksiSparepart.sparepart.nama}"></span> (<span th:text="${transaksiSparepart.quantity}"></span>)
                                                     </div>
                                                 </td>
-                                                <td th:text="'Rp'+${#numbers.formatDecimal(transaksi.biayaJasa, 0, 0)}" class="py-2 px-4 text-center biaya-jasa"></td>
-                                                <td th:text="'Rp'+${#numbers.formatDecimal(biayaTotalMap[transaksi.id], 0, 0)}" class="py-2 px-4 text-center biaya-total"></td>
-
+                                                <td th:text="${#numbers.formatDecimal(transaksi.biayaJasa, 0, 0)}" class="py-2 px-4 text-center biaya-jasa"></td>
+                                                <td th:text="${#numbers.formatDecimal(biayaTotalMap[transaksi.id], 0, 0)}" class="py-2 px-4 text-center biaya-total"></td>
+                                                <td th:text="${transaksi.tanggalTransaksi}" class="py-2 px-4 text-center"></td>
                                                 <td class="py-2 px-4 text-center">
                                                     <button class="btn btn-warning px-2 py-2 text-sm add-sparepart" th:data-transaksi-id="${transaksi.id}" th:disabled="${transaksi.status == 'done'}">+ Sparepart</button>
                                                     <form th:action="@{/transaksi-selesai/{id}(id=${transaksi.id})}" method="post" class="inline-block">
@@ -213,23 +212,18 @@
             });
         });
 
-        // //format rupiah
-        // function formatRupiah(angka) {
-        //     return angka.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+       // Fungsi untuk memformat angka ke format Rupiah
+        function formatRupiah(angka) {
+            const number = parseFloat(angka.replace(/[^\d]/g, "")); // Hapus karakter selain angka
+            if (isNaN(number)) return angka; // Jika bukan angka, kembalikan nilai asli
+            return "Rp " + number.toLocaleString("id-ID", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
 
-        // }
-
-        document.querySelectorAll('td[class*="py-2"]').forEach((cell) => {
-            const value = cell.textContent.trim();
-            if (!isNaN(value) && value !== "") {
-                cell.textContent = formatRupiah(value);
-            }
-        });
-
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('.biaya-jasa, .biaya-total').forEach((cell) => {
+        // Format nilai biayaJasa dan biayaTotal pada saat halaman dimuat
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelectorAll(".biaya-jasa, .biaya-total").forEach(cell => {
                 const value = cell.textContent.trim();
-                if (!isNaN(value) && value !== "") {
+                if (value) {
                     cell.textContent = formatRupiah(value);
                 }
             });

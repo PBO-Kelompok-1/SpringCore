@@ -9,9 +9,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,12 +22,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tubes.pbo.models.CheckoutSparepart;
 import com.tubes.pbo.models.Pelanggan;
-import com.tubes.pbo.models.Sparepart;
 import com.tubes.pbo.models.Transaksi;
 import com.tubes.pbo.models.User;
 import com.tubes.pbo.repositories.CheckoutSparepartRepository;
 import com.tubes.pbo.repositories.PelangganRepository;
-import com.tubes.pbo.repositories.SparepartRepository;
 import com.tubes.pbo.repositories.TransaksiRepository;
 import com.tubes.pbo.repositories.UserRepository;
 
@@ -65,12 +61,12 @@ public class TransaksiController {
       Map<String, Object> response = new HashMap<>();
       response.put("id", transaksi.getId());
       response.put("catatan", transaksi.getCatatan());
-      response.put("stnk", transaksi.getStnk());
       response.put("motor", transaksi.getMotor());
       response.put("biayaJasa", transaksi.getBiayaJasa());
       response.put("pelanggan", transaksi.getPelanggan());
       response.put("mekanik", transaksi.getMekanik());
       response.put("status", transaksi.getStatus());
+      response.put("tanggalTransaksi", transaksi.getTanggalTransaksi());
 
       // Ambil daftar sparepart yang terkait dengan transaksi ini
       List<CheckoutSparepart> checkoutSpareparts = checkoutSparepartRepository.findByTransaksiId(transaksi.getId());
@@ -103,26 +99,6 @@ public class TransaksiController {
     }).collect(Collectors.toList());
   }
 
-  // @PostMapping("/add-transaction")
-  // public ResponseEntity<String> addTransaction(@RequestBody Transaksi
-  // transaksi, @RequestParam List<Integer> sparepartIds) {
-  // // 1. Save the Transaksi
-  // transaksiRepository.save(transaksi);
-
-  // // 2. For each sparepart ID, create a CheckoutSparepart
-  // for (Integer spId : sparepartIds) {
-  // Sparepart sparepart = sparepartRepository.findById(spId).orElse(null);
-  // if (sparepart != null) {
-  // CheckoutSparepart checkout = new CheckoutSparepart();
-  // checkout.setTransaksi(transaksi);
-  // checkout.setSparepart(sparepart);
-  // checkout.setQuantity(1); // or a chosen quantity
-  // checkoutSparepartRepository.save(checkout);
-  // }
-  // }
-  // return ResponseEntity.ok("Transaksi beserta Sparepart berhasil disimpan.");
-  // }
-
   @GetMapping("/{id}")
   public ResponseEntity<Map<String, Object>> getTransaksiWithSpareparts(@PathVariable int id) {
     Optional<Transaksi> transaksiOptional = transaksiRepository.findById(id);
@@ -139,12 +115,12 @@ public class TransaksiController {
     Map<String, Object> response = new HashMap<>();
     response.put("id", transaksi.getId());
     response.put("catatan", transaksi.getCatatan());
-    response.put("stnk", transaksi.getStnk());
     response.put("motor", transaksi.getMotor());
     response.put("biayaJasa", transaksi.getBiayaJasa());
     response.put("pelanggan", transaksi.getPelanggan());
     response.put("mekanik", transaksi.getMekanik());
     response.put("status", transaksi.getStatus());
+    response.put("tanggalTransaksi", transaksi.getTanggalTransaksi());
 
     // Mengonversi CheckoutSparepart ke format yang lebih sederhana
     List<Map<String, Object>> spareparts = checkoutSpareparts.stream().map(cs -> {
@@ -168,7 +144,6 @@ public class TransaksiController {
     if (existingTransaksi.isPresent()) {
       Transaksi transaksi = existingTransaksi.get();
       transaksi.setCatatan(updatedTransaksi.getCatatan());
-      transaksi.setStnk(updatedTransaksi.getStnk());
       transaksi.setMotor(updatedTransaksi.getMotor());
       transaksi.setBiayaJasa(updatedTransaksi.getBiayaJasa());
       transaksi.setPelanggan(updatedTransaksi.getPelanggan());
@@ -244,7 +219,6 @@ public class TransaksiController {
       response.put("id", transaksi.getId());
       response.put("pelanggan", transaksi.getPelanggan());
       response.put("mekanik", transaksi.getMekanik());
-      response.put("stnk", transaksi.getStnk());
       response.put("motor", transaksi.getMotor());
       response.put("catatan", transaksi.getCatatan());
       response.put("biayaJasa", transaksi.getBiayaJasa());
@@ -252,6 +226,7 @@ public class TransaksiController {
       response.put("totalHarga", transaksi.getBiayaJasa() + checkoutSpareparts.stream()
           .mapToDouble(cs -> cs.getQuantity() * cs.getSparepart().getHarga()).sum());
       response.put("status", transaksi.getStatus());
+      response.put("tanggalTransaksi", transaksi.getTanggalTransaksi());
       return response;
     }).collect(Collectors.toList());
     return ResponseEntity.ok(responseList);

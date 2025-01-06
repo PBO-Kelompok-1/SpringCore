@@ -23,9 +23,6 @@
                         <div class="card ">
                             <div class="card-header">
                                 <h4 class="card-title">Sparepart List</h4>
-                                <!-- disable add button -->
-                                <!-- <button id="add-sparepart" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 mb-4 rounded">Add Sparepart</button> -->
-
                             </div>
 
                             <div class="card-body">
@@ -38,8 +35,6 @@
                                                 <th class="py-2 px-4 border-b border-gray-700 text-center">Deskripsi</th>
                                                 <th class="py-2 px-4 border-b border-gray-700 text-center">Harga</th>
                                                 <th class="py-2 px-4 border-b border-gray-700 text-center">Stok</th>
-                                                <!-- Disable kolom aksi  -->
-                                                <!-- <th class="py-2 px-4 border-b border-gray-700 text-center">Aksi</th>-->
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -50,23 +45,6 @@
                                                 <td th:text="'Rp'+${#numbers.formatDecimal(sparepart.harga, 0, 0)}" class="py-2 px-4 border-b border-gray-600 text-center harga"></td>
                                                 <td th:text="${sparepart.stok}" class="py-2 px-4 border-b border-gray-600 text-center"></td>
                                                 <td class="py-2 px-4 border-b border-gray-600 text-center">
-
-                                                    <!-- <th class="py-2 px-4 border-b border-gray-700 text-center">Aksi</th>
-                             <button class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded mr-2 edit-sparepart"
-                                    th:attr="data-id=${sparepart.id}"
-                                    th:data-nama="${sparepart.nama}"
-                                    th:data-deskripsi="${sparepart.deskripsi}"
-                                    th:data-harga="${sparepart.harga}"
-                                    th:data-stok="${sparepart.stok}"
-                                    >Edit</button>
-                                <form th:action="@{/sparepart/{id}(id=${sparepart.id})}" method="post" class="inline-block">
-                                <input type="hidden" name="_method" value="delete"/>
-                                <button type="button" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded delete-button">
-                                    Delete
-                                </button>
-                                </form>
-                            </td>
-                            -->
                                             </tr>
                                         </tbody>
                                     </table>
