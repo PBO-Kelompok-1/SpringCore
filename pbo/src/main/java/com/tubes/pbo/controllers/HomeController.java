@@ -42,17 +42,6 @@ public class HomeController {
 
     @GetMapping("/login")
     public String login(Principal principal,User user) {
-
-        //user getrole gak fungsi
-        String role = user.getRole();
-        if (principal != null) {
-            // Redirect sesuai role jika sudah login
-            if ("ADMIN".equals(role)) {
-                return "redirect:/dashboard";
-            } else if ("MEKANIK".equals(role)) {
-                return "redirect:/dashboard-mekanik";
-            }
-        }
         return "login"; // Jika belum login, tampilkan halaman login
     }
     

@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
-// import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -55,19 +55,6 @@ public class TransaksiController {
     return "redirect:/transaksi";
   }
 
-  // Cuma buat debugging klo mau pake gpp
-  // @PostMapping
-  // public ResponseEntity<String> addTransaksi(@RequestBody Transaksi transaksi)
-  // {
-  // try {
-  // transaksiRepository.save(transaksi);
-  // return ResponseEntity.ok("Transaksi berhasil ditambahkan.");
-  // } catch (Exception e) {
-  // e.printStackTrace();
-  // return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Gagal
-  // menambahkan transaksi.");
-  // }
-  // }
 
   @GetMapping("/all")
   public List<Map<String, Object>> getAllTransaksi() {
