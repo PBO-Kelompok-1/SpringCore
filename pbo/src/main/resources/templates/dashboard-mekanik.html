@@ -47,13 +47,12 @@
                                                 <td th:text="${transaksi.id}" class="py-2 px-4 text-center"></td>
                                                 <td th:text="${transaksi.pelanggan.nama}" class="py-2 px-4 text-center"></td>
                                                 <td th:text="${transaksi.catatan}" class="py-2 px-4 text-center"></td>
-                                                <td th:text="${transaksi.stnk}" class="py-2 px-4 text-center"></td>
+                                                <td th:text="${#strings.replace(transaksi.stnk, '.', '')}" class="py-2 px-4 text-center"></td>
                                                 <td th:text="${transaksi.motor}" class="py-2 px-4 text-center"></td>
                                                 <td class="py-2 px-4 text-center">
                                                     <!-- Loop untuk menampilkan sparepart yang terkait dengan transaksi -->
                                                     <div th:each="transaksiSparepart : ${transaksiSparepartList}" th:if="${transaksiSparepart.transaksi.id == transaksi.id}">
-                                                        <span th:text="${transaksiSparepart.sparepart.nama}"></span> (
-                                                        <span th:text="${transaksiSparepart.quantity}"></span>)
+                                                        <span th:text="${transaksiSparepart.sparepart.nama}"></span> (<span th:text="${transaksiSparepart.quantity}"></span>)
                                                     </div>
                                                 </td>
                                                 <td th:text="'Rp'+${#numbers.formatDecimal(transaksi.biayaJasa, 0, 0)}" class="py-2 px-4 text-center biaya-jasa"></td>
@@ -141,7 +140,7 @@
             </div>
         </div>
     </div>
-    <script>
+    <>
         // Function to show notification
         function showNotification(message) {
             const notificationModal = document.getElementById("notification-modal");
@@ -235,7 +234,7 @@
                 }
             });
         });
-    </script>
+    </>
 
     <!--   Core JS Files   -->
     <script src="/assets/js/core/jquery.min.js"></script>
