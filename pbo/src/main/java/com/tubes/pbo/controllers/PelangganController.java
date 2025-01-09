@@ -5,7 +5,6 @@ import com.tubes.pbo.models.Pelanggan;
 import com.tubes.pbo.repositories.PelangganRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-// import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -42,10 +41,7 @@ public class PelangganController {
 
     // Update pelanggan (only accessible by admin)
     @PutMapping("/{id}")
-    public ResponseEntity<String> updatePelanggan(@PathVariable int id, @RequestBody Pelanggan updatedPelanggan /*, Authentication authentication */) {
-        // if (!authentication.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals("ROLE_ADMIN"))) {
-        //     return ResponseEntity.status(403).body("Access Denied: Only admin can edit data.");
-        // }
+    public ResponseEntity<String> updatePelanggan(@PathVariable int id, @RequestBody Pelanggan updatedPelanggan) {
 
         Optional<Pelanggan> existingPelanggan = pelangganRepository.findById(id);
         if (existingPelanggan.isPresent()) {

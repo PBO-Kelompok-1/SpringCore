@@ -2,10 +2,13 @@ package com.tubes.pbo.seeders;
 
 import com.tubes.pbo.models.User;
 import com.tubes.pbo.repositories.UserRepository;
+import com.tubes.pbo.repositories.MekanikRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import com.tubes.pbo.models.Mekanik;
 import com.tubes.pbo.models.Pelanggan;
 import com.tubes.pbo.repositories.PelangganRepository;
 
@@ -17,6 +20,9 @@ public class DatabaseSeeder implements CommandLineRunner {
 
   @Autowired
   private UserRepository userRepository;
+
+  @Autowired
+  private MekanikRepository mekanikRepository;
 
   @Autowired
   private PasswordEncoder passwordEncoder;
@@ -41,11 +47,13 @@ public class DatabaseSeeder implements CommandLineRunner {
 
     //tes bikin mekanik
     if (userRepository.findByUsername("mekanik1").isEmpty()) {
-      User mekanik1 = new User();
+      Mekanik mekanik1 = new Mekanik();
       mekanik1.setUsername("mekanik1");
       mekanik1.setPassword(passwordEncoder.encode("mekanik123"));
       mekanik1.setRole("MEKANIK");
-      userRepository.save(mekanik1);
+      mekanik1.setNoTelp("08123456789");
+      mekanik1.setAlamat("Jl. Danau Sentani No. 1");
+      mekanikRepository.save(mekanik1);
       System.out.println("mekanik1 user created");
     } else {
       System.out.println("mekanik1 user already exists");

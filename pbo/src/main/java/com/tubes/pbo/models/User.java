@@ -1,9 +1,11 @@
 package com.tubes.pbo.models;
+
 import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
 @Table(name = "user")
+@Inheritance(strategy = InheritanceType.JOINED) // Pewarisan
 @Data
 public class User {
 

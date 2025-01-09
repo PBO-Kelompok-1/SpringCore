@@ -1,7 +1,9 @@
 package com.tubes.pbo.controllers;
 
 import com.tubes.pbo.models.User;
+import com.tubes.pbo.models.Mekanik;
 import com.tubes.pbo.repositories.UserRepository;
+import com.tubes.pbo.repositories.MekanikRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,23 +21,26 @@ public class UserController {
     private UserRepository userRepository;
 
     @Autowired
+    private MekanikRepository mekanikRepository;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
-    // Menambahkan data user (Create)
+    // Menambahkan data mekanik (Create)
     @PostMapping("/add")
-    public String addUser(@RequestBody User newUser) {
-        String encryptedPassword = passwordEncoder.encode(newUser.getPassword());
+    public String addMekanik(@RequestBody Mekanik newMekanik) {
+        String encryptedPassword = passwordEncoder.encode(newMekanik.getPassword());
 
-        newUser.setPassword(encryptedPassword);
+        newMekanik.setPassword(encryptedPassword);
 
-        userRepository.save(newUser);
-        return "User berhasil ditambahkan!";
+        mekanikRepository.save(newMekanik);
+        return "Mekanik berhasil ditambahkan!";
     }
 
-    // Mengambil semua data user (Read)
+    // Mengambil semua data mekanik (Read)
     @GetMapping("/all")
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<Mekanik> getAllMekanik() {
+        return mekanikRepository.findAll();
     }
 
     // Mengambil data user berdasarkan ID (Read)
@@ -52,20 +57,22 @@ public class UserController {
 
     // Menghapus user berdasarkan ID (Delete)
     @DeleteMapping("/delete/{id}")
-    public String deleteUser(@PathVariable int id) {
-        userRepository.deleteById(id);
-        return "User dengan ID " + id + " berhasil dihapus!";
+    public String deleteUser(@PathVariable Long id) {
+        mekanikRepository.deleteById(id);
+        return "Mekanik dengan ID " + id + " berhasil dihapus!";
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updatePelanggan(@PathVariable int id, @RequestBody User updatedUser /*, Authentication authentication */) {
-        User existingUser = userRepository.findById(id);
-        if (existingUser != null) {
-            existingUser.setUsername(updatedUser.getUsername());
-            String encryptedPassword = passwordEncoder.encode(updatedUser.getPassword());
-            existingUser.setPassword(encryptedPassword);
-            userRepository.save(existingUser);
-            return ResponseEntity.ok("User updated successfully.");
+    public ResponseEntity<String> updateMekanik(@PathVariable int id, @RequestBody Mekanik updatedMekanik) {
+        Mekanik existingMekanik = mekanikRepository.findById(id);
+        if (existingMekanik != null) {
+            existingMekanik.setUsername(updatedMekanik.getUsername());
+            existingMekanik.setNoTelp(updatedMekanik.getNoTelp());
+            existingMekanik.setAlamat(updatedMekanik.getAlamat());
+            String encryptedPassword = passwordEncoder.encode(updatedMekanik.getPassword());
+            existingMekanik.setPassword(encryptedPassword);
+            mekanikRepository.save(existingMekanik);
+            return ResponseEntity.ok("Mekanik updated successfully.");
         } else {
             return ResponseEntity.notFound().build();
         }
