@@ -1,4 +1,10 @@
 # 🛠️ Aplikasi Service Bengkel 2024
+## Tim Kami
+- Gede Bagus Krishnanditya Merta
+- Raka Aditya Waluya
+- Valentino Hartanto
+- Muhammad Azmi
+- Awanda Puspa Larasati
 
 ## 📚 Table of Contents
 - [Introduction](#introduction)
